@@ -23,6 +23,7 @@ defmodule ApiWeb.Router do
   # Other scopes may use custom stacks.
    scope "/api", ApiWeb do
      pipe_through :api
+
      resources "/users", UserController
      resources "/clocks",ClockController
      post "/clocks/:userId", ClockController, :create
