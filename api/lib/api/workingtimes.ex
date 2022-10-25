@@ -21,6 +21,10 @@ defmodule Api.Workingtimes do
     Repo.all(Workingtime)
   end
 
+#  def list_workingtimes_by_user(userId) do
+#    Repo.all(from w in Workingtime, where: w.user == ^userId)
+#  end
+
   @doc """
   Gets a single workingtime.
 
@@ -36,6 +40,9 @@ defmodule Api.Workingtimes do
 
   """
   def get_workingtime!(id), do: Repo.get!(Workingtime, id)
+
+  def get_workingtime_by_user(userId, id), do: Repo.get_by(Workingtime, [user: userId, id: id])
+
 
   @doc """
   Creates a workingtime.
