@@ -5,7 +5,7 @@ defmodule Api.Workingtimes.Workingtime do
   schema "workingtimes" do
     field :end, :naive_datetime
     field :start, :naive_datetime
-    has_many :user, :id
+    field :user, :id
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule Api.Workingtimes.Workingtime do
   @doc false
   def changeset(workingtime, attrs) do
     workingtime
-    |> cast(attrs, [:start, :end])
-    |> validate_required([:start, :end])
+    |> cast(attrs, [:start, :end, :user])
+    |> validate_required([:start, :end, :user])
   end
 end

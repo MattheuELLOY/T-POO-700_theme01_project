@@ -5,7 +5,7 @@ defmodule Api.Clocks.Clock do
   schema "clocks" do
     field :status, :boolean, default: true
     field :time, :naive_datetime
-    has_many :user, :id
+    field :user, :id
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule Api.Clocks.Clock do
   @doc false
   def changeset(clock, attrs) do
     clock
-    |> cast(attrs, [:time, :status])
+    |> cast(attrs, [:time, :status, :user])
     |> validate_required([:time, :status])
   end
 end
