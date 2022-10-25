@@ -24,12 +24,13 @@ defmodule ApiWeb.Router do
    scope "/api", ApiWeb do
      pipe_through :api
 
-     resources "/users", UserController
-     resources "/clocks",ClockController
+     resources "/users", UserController, [:new, :edit]
+     resources "/clocks", ClockController, [:new, :edit]
+     resources "/workingtimes", WorkingtimeController, [:new, :edit]
+     post "/workingtimes/:userId", WorkingtimeController, :create
+
      post "/clocks/:userId", ClockController, :create
      get "/clocks/:userId", ClockController, :show
-     resources "/workingtimes",WorkingtimeController
-     post "/workingtimes/:userId", WorkingtimeController, :create
 
 
   end
