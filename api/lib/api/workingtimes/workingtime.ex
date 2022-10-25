@@ -14,6 +14,6 @@ defmodule Api.Workingtimes.Workingtime do
   def changeset(workingtime, attrs) do
     workingtime
     |> cast(attrs, [:start, :end, :user])
-    |> validate_required([:start, :end])
+    |> validate_required([:start, :end, :user])
   end
 end
