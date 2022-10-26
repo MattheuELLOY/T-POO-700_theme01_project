@@ -17,9 +17,28 @@ defmodule Api.Workingtimes do
       [%Workingtime{}, ...]
 
   """
+  # complete method
   def list_workingtimes(%{"userId" => userId, "start" => start, "end" => end_time}) do
     Repo.all(from t in Workingtime,
              where: t.user == ^userId and t.start == ^start and t.end == ^end_time)
+  end
+
+  # only userId and start method
+  def list_workingtimes(%{"userId" => userId, "start" => start}) do
+    Repo.all(from t in Workingtime,
+             where: t.user == ^userId and t.start == ^start)
+  end
+
+  #only userId and end method
+  def list_workingtimes(%{"userId" => userId, "end" => end_time}) do
+    Repo.all(from t in Workingtime,
+             where: t.user == ^userId and t.end == ^end_time)
+  end
+
+  #only userId
+  def list_workingtimes(%{"userId" => userId}) do
+    Repo.all(from t in Workingtime,
+             where: t.user == ^userId)
   end
 
   def list_workingtimes do

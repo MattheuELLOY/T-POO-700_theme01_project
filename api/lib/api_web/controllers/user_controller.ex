@@ -25,6 +25,11 @@ defmodule ApiWeb.UserController do
     render(conn, "index.json", users: users)
   end
 
+  def index(conn, %{"username" => username}) do
+    users = Users.list_users(%{"username" => username})
+    render(conn, "index.json", users: users)
+  end
+
   def index(conn, _params) do
     users = Users.list_users()
     render(conn, "index.json", users: users)
