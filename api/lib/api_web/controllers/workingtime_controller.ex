@@ -11,13 +11,13 @@ defmodule ApiWeb.WorkingtimeController do
     with {:ok, %Workingtime{} = workingtime} <- Workingtimes.create_workingtime(completed_params) do
       conn
       |> put_status(:created)
-#      |> put_resp_header("location", Routes.workingtime_path(conn, :show, workingtime)) error show in postman!
+#      |> put_resp_header("location", Routes.workingtime_path(conn, :show, workingtime))
       |> render("show.json", workingtime: workingtime)
     end
   end
 
-  def index(conn, %{"userId" => id, "start" => start, "end" => end_time}) do
-    workingtimes = Workingtimes.list_workingtimes(%{"userId" => id, "start" => start, "end" => end_time})
+  def index(conn, %{"userId" => userId, "start" => start, "end" => end_time}) do
+    workingtimes = Workingtimes.list_workingtimes(%{"userId" => userId, "start" => start, "end" => end_time})
     render(conn, "index.json", workingtimes: workingtimes)
   end
 
