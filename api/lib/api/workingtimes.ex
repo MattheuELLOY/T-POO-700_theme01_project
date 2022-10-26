@@ -17,14 +17,15 @@ defmodule Api.Workingtimes do
       [%Workingtime{}, ...]
 
   """
+  def list_workingtimes(%{"userId" => id, "start" => start, "end" => end_time}) do
+    Repo.all(from t in Workingtime,
+             where: t.user == ^id and t.start == ^start and t.end == ^end_time)
+  end
+
   def list_workingtimes do
     Repo.all(Workingtime)
   end
 
-  def list_workingtimes(%{"id" => id, "start" => start, "end" => end_time}) do
-    Repo.all(from t in Workingtime,
-    where: t.id == ^id and t.start == ^start and t.end == ^end_time)
-  end
 
   @doc """
   Gets a single workingtime.
@@ -41,6 +42,9 @@ defmodule Api.Workingtimes do
 
   """
   def get_workingtime!(id), do: Repo.get!(Workingtime, id)
+
+  def get_workingtime_by_user(userId, id), do: Repo.get_by(Workingtime, [user: userId, id: id])
+
 
   @doc """
   Creates a workingtime.
