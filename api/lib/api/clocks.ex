@@ -41,6 +41,9 @@ defmodule Api.Clocks do
   """
   def get_clock!(id), do: Repo.get!(Clock, id)
 
+  def get_clock_by_user!(userId), do: Repo.get_by!(Clock, [user: userId])
+
+
   @doc """
   Creates a clock.
 
