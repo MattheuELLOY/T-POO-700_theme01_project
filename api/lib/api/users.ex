@@ -21,6 +21,21 @@ defmodule Api.Users do
     Repo.all(User)
   end
 
+  def list_users(%{"username" => username, "email" => email}) do
+    Repo.all(from t in User,
+      where: t.username == ^username and t.email == ^email)
+  end
+
+  def list_users(%{"username" => username}) do
+    Repo.all(from t in User,
+      where: t.username == ^username)
+  end
+
+  def list_users(%{"email" => email}) do
+    Repo.all(from t in User,
+      where: t.email == ^email)
+  end
+  
   @doc """
   Gets a single user.
 
@@ -57,7 +72,6 @@ defmodule Api.Users do
 
   @doc """
   Updates a user.
-
   ## Examples
 
       iex> update_user(user, %{field: new_value})

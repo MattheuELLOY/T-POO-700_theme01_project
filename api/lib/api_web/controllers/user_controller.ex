@@ -6,11 +6,6 @@ defmodule ApiWeb.UserController do
 
   action_fallback ApiWeb.FallbackController
 
-  def index(conn, _params) do
-    users = Users.list_users()
-    render(conn, "index.json", users: users)
-  end
-
   def create(conn, %{"user" => user_params}) do
     with {:ok, %User{} = user} <- Users.create_user(user_params) do
       conn
@@ -18,6 +13,21 @@ defmodule ApiWeb.UserController do
       |> put_resp_header("location", Routes.user_path(conn, :show, user))
       |> render("show.json", user: user)
     end
+  end
+
+  def index(conn, %{"email" => email, "username" => username}) do
+    users = Users.list_users(%{"email" => email, "username" => username})
+    render(conn, "index.json", users: users)
+  end
+
+  def index(conn, %{"email" => email}) do
+    users = Users.list_users(%{"email" => email})
+    render(conn, "index.json", users: users)
+  end
+
+  def index(conn, _params) do
+    users = Users.list_users()
+    render(conn, "index.json", users: users)
   end
 
   def show(conn, %{"id" => id}) do
