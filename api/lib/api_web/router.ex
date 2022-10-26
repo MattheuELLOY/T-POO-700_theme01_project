@@ -11,6 +11,7 @@ defmodule ApiWeb.Router do
   end
 
   pipeline :api do
+    plug CORSPlug
     plug :accepts, ["json"]
   end
 
@@ -32,8 +33,9 @@ defmodule ApiWeb.Router do
      put "/workingtimes/:id", WorkingtimeController, :update
      delete "/workingtimes/:id", WorkingtimeController, :delete
 
-     post "/clocks/:userId", ClockController, :create
      get "/clocks/:userId", ClockController, :show
+     post "/clocks/:userId", ClockController, :create
+
 
 
 #     post "/workingtimes/:userId", WorkingtimeController, :create
