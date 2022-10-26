@@ -25,17 +25,19 @@ defmodule ApiWeb.Router do
      pipe_through :api
 
      resources "/users", UserController, [:new, :edit]
-     resources "/clocks", ClockController, [:new, :edit]
-     resources "/workingtimes", WorkingtimeController, [:new, :edit]
+
+     get "/workingtimes/:userId", WorkingtimeController, :index
+     get "/workingtimes/:userId/:id", WorkingtimeController, :show
      post "/workingtimes/:userId", WorkingtimeController, :create
+     put "/workingtimes/:id", WorkingtimeController, :update
+     delete "/workingtimes/:id", WorkingtimeController, :delete
 
      post "/clocks/:userId", ClockController, :create
      get "/clocks/:userId", ClockController, :show
 
 
 #     post "/workingtimes/:userId", WorkingtimeController, :create
-#     put "/workingtimes/:id", WorkingtimeController, :update
-#     delete "/workingtimes/:id", WorkingtimeController, :delete
+#
 #     get "/workingtimes/:userId/:id", WorkingtimeController, :show
 
 
