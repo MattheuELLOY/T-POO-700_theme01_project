@@ -1,9 +1,9 @@
 <template>
-  <WorkingTimes v-bind:user="1"/>
+  <WorkingTime v-bind:user="1"/>
 </template>
 
 <script setup lang="ts">
-import WorkingTimes from '@/components/WorkingTimes.vue';
+import WorkingTime from '@/components/WorkingTime.vue';
 </script>
 
 <style scoped lang="css">

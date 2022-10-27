@@ -3,73 +3,56 @@
       <p>Workingtime</p>
     
       <div>
-        Afficher tout les workingtimes.
-        <table>
-        <thead>
-          <tr>
-            <th v-for="value in columns">
-                <span>{{value}}</span>
-            </th>
-          </tr>
-        </thead>
-            <tbody>
-            <tr v-for="item in data.listWorkingTime">
-                <td>
-                    <span>{{item.start}}</span>
-                    <span>{{item.end}}</span>
-                    <span>{{item.id}}</span>
-                    <span>{{item.user}}</span>
-                    <span><button v-on:click="deleteWorkingTime(item.id)">Delete</button></span>
-                    <span><button action="del({{item.id}})">Update</button></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        
+        <h2>CREATE NEW WORKING TIME</h2>
+        <input type="date" v-model="data.start" />
+        <input type="date" v-model="data.end" />
+        <button @click="manageWorkingTime(data.start, data.end)">VALIDATE</button>
       </div>
     </div>
   </template>
   
   <script lang="ts">
-  import { onMounted, reactive } from 'vue'
-  import type { Workingtime } from '@/models/workingtime'
+  import { reactive } from 'vue'
   import { useWorkingTime } from '@/store/workingTime';
-  
+    import { useUserStore } from '@/store/user';
+
+
   export default {
-    data() {
-        return {
-            columns : ["start", "end", "id", "userId","Delete", "Update"],
-        }
-    },
     props: {
         
-      user : {
+      idWorkingTime : {
         type : Number,
-        required : true
+        required : false
       },
-      title: String,
     },
     setup (props) {
         const data = reactive({
-            workinTime: {} as Workingtime,
-            userID: null,
-            start: '',
-            end: '',
-            listWorkingTime: {} as Array<Workingtime>
+        start : new Date(),
+        end : new Date()
         });
+
         const workingTimeStore = useWorkingTime();
+        const userStore = useUserStore();
 
-        data.listWorkingTime = workingTimeStore.getAll(props.user) as Array<Workingtime>;
-        
-        function deleteWorkingTime (idWorkingTime: Number){
-            console.log("Delete")
-            workingTimeStore.delete(idWorkingTime);
-            data.listWorkingTime = workingTimeStore.getAll(props.user) as Array<Workingtime>;
+        // Mes méthoes
+        function manageWorkingTime(start : Date, end : Date){
+
+            //userStore.user.id
+            if ( props.idWorkingTime){
+                workingTimeStore.put(props.idWorkingTime, start, end)
+                console.log("put")
+
+            } else {
+                workingTimeStore.post(1, start, end)
+                console.log("post")
+
+            }
         }
-
         return {
-            workingTimeStore,
+            // Mes vars et méthodes à redonner au html
+            manageWorkingTime,
             data,
-            deleteWorkingTime,
         }
     }
   }

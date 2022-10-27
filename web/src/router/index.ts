@@ -1,19 +1,20 @@
-import { createRouter, createMemoryHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import SignUpVue from '@/views/SignUp.vue'
 import LoginVue from '@/views/Login.vue'
 import HomeVue from '@/views/Home.vue'
 import ProfileVue from '@/views/Profile.vue'
 import WorkingTimeBoard from '@/views/WorkingTimeBoard.vue'
+import WorkingTimeManagement from '@/views/WorkingTimeManagement.vue'
 const routes = [
 	{
 		path: '/',
-		name: '',
-		component: WorkingTimeBoard
+		name: 'Home',
+		component: HomeVue
 	},
 	{
 		path: '/sign-up',
 		name: 'SignUp',
-		component: WorkingTimeBoard
+		component: SignUpVue
 	},
 	{
 		path: '/login',
@@ -34,13 +35,19 @@ const routes = [
 	,
 	{
 		path: '/workingtime',
-		name: 'Profile',
+		name: 'WorkingTime',
 		component: WorkingTimeBoard
+	}
+	,
+	{
+		path: '/workingtimes',
+		name: 'WorkingTimes',
+		component: WorkingTimeManagement
 	}
 ]
 
 const router = createRouter({
-	history: createMemoryHistory(),
+	history: createWebHistory(),
 	routes
 })
 
