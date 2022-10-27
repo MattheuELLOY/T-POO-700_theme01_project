@@ -1,5 +1,5 @@
 <template>
-  <h1>{{  }}</h1>
+  <h1>home vue</h1>
 </template>
 
 <script lang="ts">
@@ -9,6 +9,7 @@ export default {
   setup () {
     const userStore = useUserStore();
     console.log(userStore.user)
+    console.log("Je suis là")
   }
 }
 </script>

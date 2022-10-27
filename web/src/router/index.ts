@@ -3,17 +3,17 @@ import SignUpVue from '@/views/SignUp.vue'
 import LoginVue from '@/views/Login.vue'
 import HomeVue from '@/views/Home.vue'
 import ProfileVue from '@/views/Profile.vue'
-
+import WorkingTimeBoard from '@/views/WorkingTimeBoard.vue'
 const routes = [
 	{
 		path: '/',
 		name: '',
-		component: SignUpVue
+		component: WorkingTimeBoard
 	},
 	{
 		path: '/sign-up',
 		name: 'SignUp',
-		component: SignUpVue
+		component: WorkingTimeBoard
 	},
 	{
 		path: '/login',
@@ -30,6 +30,12 @@ const routes = [
 		path: '/profile',
 		name: 'Profile',
 		component: ProfileVue
+	}
+	,
+	{
+		path: '/workingtime',
+		name: 'Profile',
+		component: WorkingTimeBoard
 	}
 ]
 
