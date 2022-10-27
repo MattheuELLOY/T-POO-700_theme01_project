@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { User } from '../models/user'
 import HTTP from '../http-common'
+import type { AxiosResponse } from 'axios'
 
 export const useUserStore = defineStore('user', {
 	state: () => {
@@ -12,7 +13,7 @@ export const useUserStore = defineStore('user', {
 		getByFilter(email: string, username: string): User {
 			HTTP
 				.get('users?email=' + email + '&username=' + username)
-				.then(response => (this.user = response.data))
+				.then((response: AxiosResponse) => (this.user = <User>response.data))
 			return this.user
 		},
 		get(userID: number): User {
