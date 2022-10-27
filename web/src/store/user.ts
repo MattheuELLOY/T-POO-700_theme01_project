@@ -13,11 +13,11 @@ export const useUserStore = defineStore('user', {
 		getByFilter(email: string, username: string): User {
 			HTTP
 				.get('users?email=' + email + '&username=' + username)
-				.then((response: AxiosResponse) => (this.user = <User>response.data))
+				.then((response) => (this.user = <User>response.data.data[0]))
 			return this.user
 		},
 		get(userID: number): User {
-			HTTP.get('users/' + userID).then(response => (this.user = response.data))
+			HTTP.get('users/' + userID).then(response => (this.user = <User>response.data.data))
 			return this.user
 		},
 		post(email: string, username: string): void {
