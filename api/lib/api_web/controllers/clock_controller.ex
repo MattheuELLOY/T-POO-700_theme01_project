@@ -11,15 +11,23 @@ defmodule ApiWeb.ClockController do
     render(conn, "index.json", clocks: clocks)
   end
 
-  def create(conn, %{"userId" => id,"clock" => clock_params}) do
-    completed_params = Map.put(clock_params, "user", id)
-    with {:ok, %Clock{} = clock} <- Clocks.create_clock(completed_params) do
+  def create(conn, %{"clock" => clock_params,"userId" => userId}) do
+    exist = Clocks.if_clock_exist!(userId)
+    cond do
+      exist ->
+      clock = Clocks.get_clock_by_user!(userId)
+      Clocks.update_clock(clock, %{status: !clock.status})
+      new_clock = Clocks.get_clock_by_user!(userId)
+      render(conn, "show.json", clock: new_clock)
+      !exist ->
+      completed_params = Map.put(clock_params, "user", userId)
+      with {:ok, %Clock{} = clock} <- Clocks.create_clock(completed_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
       |> render("show.json", clock: clock)
+        end
+      end
     end
-  end
 
   def show(conn, %{"userId" => userId}) do
     clock = Clocks.get_clock_by_user!(userId)
