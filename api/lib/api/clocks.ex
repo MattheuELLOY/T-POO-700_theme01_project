@@ -43,6 +43,8 @@ defmodule Api.Clocks do
 
   def get_clock_by_user!(userId), do: Repo.get_by!(Clock, [user: userId])
 
+  def if_clock_exist!(userId), do: Repo.exists?(from u in Clock, where: u.user == ^userId)
+
 
   @doc """
   Creates a clock.

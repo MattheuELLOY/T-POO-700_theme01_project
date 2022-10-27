@@ -35,14 +35,6 @@ defmodule ApiWeb.Router do
 
      get "/clocks/:userId", ClockController, :show
      post "/clocks/:userId", ClockController, :create
-
-
-
-#     post "/workingtimes/:userId", WorkingtimeController, :create
-#
-#     get "/workingtimes/:userId/:id", WorkingtimeController, :show
-
-
   end
 
   # Enables LiveDashboard only for development
