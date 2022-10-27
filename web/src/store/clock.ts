@@ -9,12 +9,12 @@ export const useClockStore = defineStore('clock', {
 	actions: {
 		getClock(userID: number): Clock {
 			axios
-				.get('http://localhost:4000/api/clocks/' + userID)
+				.get('clocks/' + userID)
 				.then(response => (this.clock = response.data))
 			return this.clock
 		},
 		postClock(userID: number): void {
-			axios.post('http://localhost:4000/api/clocks/' + userID)
+			axios.post('clocks/' + userID)
 		}
 	}
 })
