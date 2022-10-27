@@ -6,16 +6,18 @@ import type { AxiosResponse } from 'axios'
 
 
 interface WorkingTimeAction {
-	post: (idUser: Number, start: Date, end: Date) => void
-	put: (idWorkingTime: Number, start: Date, end: Date) => void
+	post: (idUser: Number, start: string, end: string) => void
+	put: (idWorkingTime: Number, start: string, end: string) => void
 	delete: (idWorkingTime: Number) => void
 	getAll: (idUser: number) => void
+	setUpdateWt: (id : Number | null) => void
 }
 interface WorkingTimeState {
 	arrayWorkingTime: Workingtime[]
 	workingtime: Workingtime | null
 	responseStatus: Number
 	isLoading: boolean
+	updateWt : Number | null
 }
 
 export const useWorkingTime = defineStore<"workingtime", WorkingTimeState, any, WorkingTimeAction>('workingtime', {
@@ -24,27 +26,27 @@ export const useWorkingTime = defineStore<"workingtime", WorkingTimeState, any, 
 		responseStatus: 0,
 		arrayWorkingTime: [],
 		isLoading: false,
-
+		updateWt : null
 	}),
 	actions: {
-		post(idUser: Number, start: Date, end: Date) {
+		post(idUser: Number, start: string, end: string) {
 			console.log(start)
 			HTTP
 				.post("workingtimes/" + idUser, {
 					"workingtime": {
-						"start": start.toISOString(),
-						"end": end.toISOString()
+						"start": start,
+						"end": end
 					}
 				})
 				.then((response) => (this.workingtime = <Workingtime>response.data))
 			return this.workingtime
 		},
-		put(idWorkingTime: Number, start: Date, end: Date) {
+		put(idWorkingTime: Number, start: string, end: string) {
 			HTTP
 				.put("workingtimes/" + idWorkingTime, {
 					"workingtime": {
-						"start": start.toISOString(),
-						"end": end.toISOString()
+						"start": start,
+						"end": end
 					}
 				})
 				.then((response) => (this.workingtime = <Workingtime>response.data))
@@ -68,6 +70,11 @@ export const useWorkingTime = defineStore<"workingtime", WorkingTimeState, any, 
 					this.isLoading = false
 				})
 		},
+
+		setUpdateWt(id : Number | null){
+			this.updateWt = id
+			console.log(id)
+		}
 
 	}
 })

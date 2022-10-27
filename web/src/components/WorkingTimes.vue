@@ -20,11 +20,13 @@
                     <span>{{item.id}}</span>
                     <span>{{item.user}}</span>
                     <span><button v-on:click="deleteWorkingTime(item.id)">Delete</button></span>
-                    <span><button action="del({{item.id}})">Update</button></span>
+                    <span><button v-on:click="update(item.id)">Update</button></span>
                 </td>
             </tr>
             </tbody>
         </table>
+        <button v-on:click="$router.push('workingtime')">Add</button>
+          
       </div>
     </div>
   </template>
@@ -33,7 +35,8 @@
   import { reactive } from 'vue'
   import type { Workingtime } from '@/models/workingtime'
   import { useWorkingTime } from '@/store/workingTime';
-  
+  import router from '@/router'
+
   export default {
     data() {
         return {
@@ -63,11 +66,16 @@
         function deleteWorkingTime (idWorkingTime: Number){
             workingTimeStore.delete(idWorkingTime);
         }
+        function update(id : Number){
+          workingTimeStore.setUpdateWt(id)
+          router.push('workingtime')
+        }
 
         return {
             workingTimeStore,
             data,
             deleteWorkingTime,
+            update,
         }
     }
   }

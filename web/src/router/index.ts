@@ -36,13 +36,13 @@ const routes = [
 	{
 		path: '/workingtime',
 		name: 'WorkingTime',
-		component: WorkingTimeBoard
+		component: WorkingTimeManagement
 	}
 	,
 	{
-		path: '/workingtimes',
+		path: '/workingtimes/',
 		name: 'WorkingTimes',
-		component: WorkingTimeManagement
+		component: WorkingTimeBoard
 	}
 ]
 

@@ -5,17 +5,26 @@
       <div>
         
         <h2>CREATE NEW WORKING TIME</h2>
-        <input type="date" v-model="data.start" />
-        <input type="date" v-model="data.end" />
+        <input type="datetime-local" v-model="data.start"/>
+        <input type="datetime-local" v-model="data.end"/>
+
         <button @click="manageWorkingTime(data.start, data.end)">VALIDATE</button>
+
+        <el-moment v-model="data.start" format="MMMM Do YYYY, h:mm:ss a">
+          <el-date-picker></el-date-picker>
+        </el-moment>
       </div>
     </div>
+
+
   </template>
   
   <script lang="ts">
   import { reactive } from 'vue'
   import { useWorkingTime } from '@/store/workingTime';
-    import { useUserStore } from '@/store/user';
+  import { useUserStore } from '@/store/user';
+  import moment from 'moment'
+  import router from '@/router'
 
 
   export default {
@@ -34,20 +43,23 @@
 
         const workingTimeStore = useWorkingTime();
         const userStore = useUserStore();
-
         // Mes méthoes
         function manageWorkingTime(start : Date, end : Date){
 
-            //userStore.user.id
-            if ( props.idWorkingTime){
-                workingTimeStore.put(props.idWorkingTime, start, end)
+          const startStr = moment(start).format('YYYY-MM-DD hh:mm:ss')
+          const endtStr = moment(end).format('YYYY-MM-DD hh:mm:ss')
+            if ( workingTimeStore.updateWt != null){
+                workingTimeStore.put(workingTimeStore.updateWt, startStr, endtStr)
                 console.log("put")
+                workingTimeStore.setUpdateWt(null)
 
             } else {
-                workingTimeStore.post(1, start, end)
-                console.log("post")
-
+                //userStore.user.id
+                workingTimeStore.post(1, startStr, endtStr)
             }
+            console.log("push")
+
+            router.push('workingtimes')
         }
         return {
             // Mes vars et méthodes à redonner au html
@@ -102,3 +114,4 @@
       }
   </style>
   
+
