@@ -3,7 +3,7 @@
       <p>Workingtime</p>
     
       <div>
-        Afficher tout les workingtime.
+        Afficher tout les workingtimes.
         <table>
         <thead>
           <tr>
@@ -13,13 +13,14 @@
           </tr>
         </thead>
             <tbody>
-            <tr v-for="items in listWorkingTime">
+            <tr v-for="item in data.listWorkingTime">
                 <td>
-                    <span>{{items.start}}</span>
-                    <span>{{items.end}}</span>
-                    <span>{{items.id}}</span>
-                    <span>{{items.user}}</span>
-                    <span><button action="del({{items.id}})"></button></span>
+                    <span>{{item.start}}</span>
+                    <span>{{item.end}}</span>
+                    <span>{{item.id}}</span>
+                    <span>{{item.user}}</span>
+                    <span><button v-on:click="deleteWorkingTime(item.id)">Delete</button></span>
+                    <span><button action="del({{item.id}})">Update</button></span>
                 </td>
             </tr>
             </tbody>
@@ -29,14 +30,14 @@
   </template>
   
   <script lang="ts">
-  import { reactive } from 'vue'
+  import { onMounted, reactive } from 'vue'
   import type { Workingtime } from '@/models/workingtime'
   import { useWorkingTime } from '@/store/workingTime';
   
   export default {
     data() {
         return {
-            columns : ["start", "end", "id", "userId"],
+            columns : ["start", "end", "id", "userId","Delete", "Update"],
         }
     },
     props: {
@@ -48,19 +49,27 @@
       title: String,
     },
     setup (props) {
-      const data = reactive({
-        workinTime: {} as Workingtime,
-        userID: null,
-        start: '',
-        end: ''
-      });
-      const workingTimeStore = useWorkingTime();
+        const data = reactive({
+            workinTime: {} as Workingtime,
+            userID: null,
+            start: '',
+            end: '',
+            listWorkingTime: {} as Array<Workingtime>
+        });
+        const workingTimeStore = useWorkingTime();
 
-      const listWorkingTime = workingTimeStore.getAll(props.user) as Array<Workingtime>;
-        console.log(listWorkingTime)
+        data.listWorkingTime = workingTimeStore.getAll(props.user) as Array<Workingtime>;
+        
+        function deleteWorkingTime (idWorkingTime: Number){
+            console.log("Delete")
+            workingTimeStore.delete(idWorkingTime);
+            data.listWorkingTime = workingTimeStore.getAll(props.user) as Array<Workingtime>;
+        }
+
         return {
             workingTimeStore,
-            listWorkingTime
+            data,
+            deleteWorkingTime,
         }
     }
   }
@@ -102,6 +111,11 @@
       .user-btn:active {
           box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
         transform: translateY(3px);
+      }
+
+      td > span {
+        padding-left: 50px;
+
       }
   </style>
   

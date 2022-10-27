@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import type { Workingtime } from '@/models/workingtime'
-import axios from 'axios'
 import HTTP from '../http-common'
 import type { AxiosResponse } from 'axios'
 
@@ -8,7 +7,8 @@ export const useWorkingTime = defineStore('workingtime', {
 	state: () => ({
 			workingtime: {} as Workingtime,
 			responseStatus: 0 as Number,
-			arrayWT: {} as Array<Workingtime>
+			arrayWorkingTime: {} as Array<Workingtime>
+			
 	}),
 	actions: {
 		post(idUser : Number, start : Date, end : Date){
@@ -36,7 +36,8 @@ export const useWorkingTime = defineStore('workingtime', {
 		delete(idWorkingTime : Number){
 			HTTP
 			.delete("workingtimes/" + idWorkingTime)
-			.then((response: AxiosResponse) => (this.responseStatus = response.status))
+			.then((response: AxiosResponse) => (console.log(response.status)))
+			console.log("Fin delete")
 			return this.responseStatus
 		},
 		getAll(idUser : Number){
@@ -44,10 +45,10 @@ export const useWorkingTime = defineStore('workingtime', {
 			console.log("getAll")
 			HTTP
 			.get("workingtimes/" + idUser)
-			.then((response: AxiosResponse) => (this.arrayWT = response.data))
-
-			console.log(this.arrayWT)
-			return this.arrayWT
+			.then(response => (this.arrayWorkingTime = response.data.data))
+			
+			console.log(this.arrayWorkingTime)
+			return this.arrayWorkingTime
 		}, 
 
 	}
