@@ -16,9 +16,7 @@ export const useUserStore = defineStore('user', {
 			return this.user
 		},
 		get(userID: number): User {
-			HTTP
-				.get('users' + userID)
-				.then(response => (this.user = response.data))
+			HTTP.get('users/' + userID).then(response => (this.user = response.data))
 			return this.user
 		},
 		post(email: string, username: string): void {
@@ -29,6 +27,7 @@ export const useUserStore = defineStore('user', {
 						"username": username
 					}
 				})
+				this.getByFilter(email, username)
 		},
 		put(userID: number, email: string, username: string): void {
 			HTTP
@@ -38,6 +37,11 @@ export const useUserStore = defineStore('user', {
 						"username": username
 					}
 				})
+		},
+		delete(userID: number): void {
+			HTTP.delete('users/' + userID)
+			this.user.email = ''
+			this.user.username = ''
 		}
 	}
 })
