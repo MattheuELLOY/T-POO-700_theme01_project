@@ -34,12 +34,21 @@
 <script lang="ts">
 import type { User } from '@/models/user'
 import { useUserStore } from '@/store/user'
-import { reactive, toRefs } from 'vue'
+import { computed, reactive, toRefs } from 'vue'
+import {
+  getUser,
+  getByFilter,
+  getAllUsers,
+  post,
+  put,
+  deleted
+} from '@/helpers/user-helper'
 import router from '@/router'
 
 export default {
   props: {
     title: String,
+    status: String
   },
   setup (props) {
     const data = reactive({
@@ -49,37 +58,40 @@ export default {
       username: '' as string
     });
     const userStore = useUserStore();
+    const user = computed(() => userStore.user)
 
     function onClick(): void {
-      if (props.title === 'Sign Up') {
+      if (props.status === 'creat') {
         creatUser()
-      } else if (props.title === 'Change') {
+      } else if (props.status === 'update') {
         updateUser()
-      } else if (props.title === 'Delete'){
+      } else if (props.status === 'delete'){
 				deleteUser()
 			} else {
-        userStore.user.email = ""
-        userStore.user.username = "a"
+        user.value.id = 0
+        user.value.email = ""
+        user.value.username = "a"
         router.push('Home')
       }
     };
     function creatUser(): void {
       if (data.email && data.username) {
-        userStore.post(data.email, data.username)
-        data.email = ""
-        data.username = ""
+        post(data.email, data.username)
         router.push('Home')
       }
+      getByFilter('adkqsd@qjshdqs.com', 'quhsdqs')
     };
     function updateUser(): void {
       if (data.userID && data.email && data.username) {
-        userStore.getByFilter(data.email, data.username)
-        userStore.put(data.userID, data.email, data.username)
+        put(data.userID, data.email, data.username)
       }
     }
     function deleteUser(): void {
       if (data.userID) {
-				userStore.delete(data.userID)
+				deleted(data.userID)
+        user.value.id = 0
+        user.value.email = ""
+        user.value.username = "a"
         router.push('SignUp')
 			}
 		}

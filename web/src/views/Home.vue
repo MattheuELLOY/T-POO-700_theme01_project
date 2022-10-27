@@ -1,15 +1,11 @@
 <template>
-  <h1>{{  }}</h1>
 </template>
 
 <script lang="ts">
 import { useUserStore } from '@/store/user';
+import { computed } from 'vue';
 
 export default {
-  setup () {
-    const userStore = useUserStore();
-    console.log(userStore.user)
-  }
 }
 </script>
 
