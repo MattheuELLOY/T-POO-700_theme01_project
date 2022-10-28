@@ -1,13 +1,13 @@
 <template>
   <header>
     <nav class="navbar">
-      <div v-if="!user?.username" class="gap">
+      <div v-if="!user?.id" class="gap">
         <router-link to="/sign-up">Sign up</router-link>
         <router-link to="/Login">Login</router-link>
       </div>
       <div v-else class="gap">
-        <p>{{ user.username }}</p>
-        <select v_model="allUser" @change="selected($event.target.value)">
+        <h3>{{ user.username }}</h3>
+        <select class="drop-down" v-model="allUser" @change="selected($event.target.value)">
           <option
                 v-for="user in allUser"
                 :value="user.id"
@@ -24,7 +24,6 @@
 <script lang="ts">
 import { useUserStore } from '@/store/user'
 import { computed, reactive } from '@vue/runtime-core';
-import type { User } from './models/user';
 
 export default {
   setup () {
@@ -68,6 +67,13 @@ export default {
     border-bottom: 0px solid;
     box-shadow: 0px 0px 10px 0px;
     background-color: white;
+  }
+  .drop-down {
+    padding: 5px;
+
+    background-color: white;
+    border-color: rgb(175, 175, 175);
+    border-radius: 10px;
   }
   .gap {
     display: flex;
