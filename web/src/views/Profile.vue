@@ -1,7 +1,7 @@
 <template>
   <div class="profile-content">
-    <UserVue title="Change"/>
-    <UserVue title="Delete"/>
+    <UserVue title="Change" status="update"/>
+    <UserVue title="Delete" status="delete"/>
   </div>
 </template>
 

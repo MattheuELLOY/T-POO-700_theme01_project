@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
 import type { User } from '../models/user'
-import HTTP from '../http-common'
-import type { AxiosResponse } from 'axios'
 import { getAllUsers, getUser } from '@/helpers/user-helper'
 
 export const useUserStore = defineStore('user', {

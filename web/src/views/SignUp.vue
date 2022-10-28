@@ -1,5 +1,5 @@
 <template>
-  <UserVue title="Sign Up"/>
+  <UserVue title="Sign Up" status="create"/>
 </template>
 
 <script setup lang="ts">

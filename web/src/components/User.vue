@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="title !== 'Delete'" class="content card-user">
+    <div v-if="status !== 'delete'" class="content card-user">
       <h1>{{ title }}</h1>
-			<div v-if="title === 'Change'">
+			<div v-if="status === 'update'">
         <h2>User Id :</h2>
         <input placeholder= "user id" v-model="userID" class="user-input"/>
       </div>
@@ -61,25 +61,27 @@ export default {
     const user = computed(() => userStore.user)
 
     function onClick(): void {
-      if (props.status === 'creat') {
+      if (props.status === 'create') {
         creatUser()
       } else if (props.status === 'update') {
         updateUser()
       } else if (props.status === 'delete'){
 				deleteUser()
 			} else {
-        user.value.id = 0
+        user.value.id = -1
         user.value.email = ""
-        user.value.username = "a"
+        user.value.username = ""
         router.push('Home')
       }
     };
     function creatUser(): void {
       if (data.email && data.username) {
         post(data.email, data.username)
+        user.value.id = -1
+        user.value.email = ""
+        user.value.username = ""
         router.push('Home')
       }
-      getByFilter('adkqsd@qjshdqs.com', 'quhsdqs')
     };
     function updateUser(): void {
       if (data.userID && data.email && data.username) {
@@ -89,10 +91,7 @@ export default {
     function deleteUser(): void {
       if (data.userID) {
 				deleted(data.userID)
-        user.value.id = 0
-        user.value.email = ""
-        user.value.username = "a"
-        router.push('SignUp')
+        router.push('Home')
 			}
 		}
 

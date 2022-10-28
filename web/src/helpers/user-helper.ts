@@ -23,7 +23,6 @@ export function post(email: string, username: string): void {
         "username": username
       }
     })
-    getByFilter(email, username)
 }
 
 export function put(userID: number, email: string, username: string): void {
