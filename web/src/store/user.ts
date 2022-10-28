@@ -2,47 +2,21 @@ import { defineStore } from 'pinia'
 import type { User } from '../models/user'
 import HTTP from '../http-common'
 import type { AxiosResponse } from 'axios'
+import { getAllUsers, getUser } from '@/helpers/user-helper'
 
 export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
-			user: {} as User
+			user: {} as User,
+			allUser: [] as User[]
 		}
 	},
 	actions: {
-		getByFilter(email: string, username: string): User {
-			HTTP
-				.get('users?email=' + email + '&username=' + username)
-				.then((response: AxiosResponse) => (this.user = <User>response.data))
-			return this.user
+		getAll(): void {
+			getAllUsers().then((response) => this.allUser = response.data.data)
 		},
-		get(userID: number): User {
-			HTTP.get('users/' + userID).then(response => (this.user = response.data))
-			return this.user
-		},
-		post(email: string, username: string): void {
-			HTTP
-				.post('users', {
-					"user": {
-						"email": email,
-						"username": username
-					}
-				})
-				this.getByFilter(email, username)
-		},
-		put(userID: number, email: string, username: string): void {
-			HTTP
-				.put('users' + userID, {
-					"user": {
-						"email": email,
-						"username": username
-					}
-				})
-		},
-		delete(userID: number): void {
-			HTTP.delete('users/' + userID)
-			this.user.email = ''
-			this.user.username = ''
+		get(id: number): void {
+			getUser(id).then((response) => this.user = response.data.data)
 		}
 	}
 })

@@ -6,6 +6,14 @@
         <router-link to="/Login">Login</router-link>
       </div>
       <div v-else class="gap">
+        <p>{{ user.username }}</p>
+        <select v_model="allUser" @change="selected($event.target.value)">
+          <option
+                v-for="user in allUser"
+                :value="user.id"
+                :key="user.id">{{ user.id }}</option>
+        </select>
+        <router-link to="/home">Home</router-link>
         <router-link to="/profile">Profile</router-link>
       </div>
     </nav>
@@ -15,15 +23,24 @@
 
 <script lang="ts">
 import { useUserStore } from '@/store/user'
-import { computed } from '@vue/runtime-core';
+import { computed, reactive } from '@vue/runtime-core';
+import type { User } from './models/user';
 
 export default {
   setup () {
-    const userStore = useUserStore();
+    const userStore = useUserStore()
+    userStore.getAll()
     const user = computed(() => userStore.user)
+    const allUser = computed(() => userStore.allUser)
+
+    function selected(id: number) {
+      userStore.get(id)
+    }
 
     return {
-      user
+      user,
+      allUser,
+      selected
     }
   }
 }
