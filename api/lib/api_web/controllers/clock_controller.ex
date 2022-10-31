@@ -3,6 +3,8 @@ defmodule ApiWeb.ClockController do
 
   alias Api.Clocks
   alias Api.Clocks.Clock
+  alias Api.Workingtimes
+  alias Api.Workingtimes.Workingtime
 
   action_fallback ApiWeb.FallbackController
 
@@ -12,11 +14,14 @@ defmodule ApiWeb.ClockController do
   end
 
   def create(conn, %{"userId" => userId}) do
-    time = NaiveDateTime.utc_now;
+    time = NaiveDateTime.local_now ;
     exist = Clocks.if_clock_exist!(userId)
     cond do
       exist ->
       clock = Clocks.get_clock_by_user!(userId)
+      if (clock.status == true) do
+        Workingtimes.create_workingtime(%{"end" => time, "start" => clock.time, "user" => userId})
+      end
       Clocks.update_clock(clock, %{status: !clock.status})
       new_clock = Clocks.get_clock_by_user!(userId)
       render(conn, "show.json", clock: new_clock)
