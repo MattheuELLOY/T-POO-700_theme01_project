@@ -1,42 +1,39 @@
-version: "3.8"
-
+version: '3.6'
 services:
-  postgres:
-    image: postgres:13-alpine
+  adminer:
+    image: adminer
+    restart: always
     environment:
-      POSTGRES_DB: api_dev
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-    - ./var/data/postgresql/:/var/lib/postgresql/data/
-    ports:
-    - "5433:5432"
-    networks:
-      - timemanager
-
-  web:
-    build: web/
-    container_name: web
-    ports:
-    - "8080:8080"
-    networks:
-      - timemanager
-
-  phoenix:
-    build: api/
-    container_name: api
-    environment:
-      PGUSER: postgres
-      PGPASSWORD: root
-      PGPORT: 5432
-      PGHOST: postgres
-    networks:
-      - timemanager
+        ADMINER_DESIGN: mvt
+        ADMINER_DEFAULT_SERVER: db
     depends_on:
-    - postgres
+      - db
+    networks:
+      - db
     ports:
-    - "4000:4000"
+      - 8080:8080
 
+  portainer:
+    image: portainer/portainer-ce
+    volumes:
+        - ./portainer:/data
+        - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+        - 9000:9000
+  db:
+    image: postgres
+    environment:
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DATABASE}
+        PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+        - '5432:5432'
+    networks:
+        - db
+volumes:
+  db:
 networks:
-  timemanager:
-    driver: bridge
+  db:
