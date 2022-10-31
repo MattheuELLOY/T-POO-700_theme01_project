@@ -1,10 +1,19 @@
 <template>
-  <WorkingTime v-bind:user="1"/>
+  <WorkingTime v-bind:userid="userid" status='' />
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import WorkingTime from '@/components/WorkingTime.vue';
+import { onMounted } from 'vue';
+
+export default {
+  props: {
+    userid: Number
+  },
+  components: { WorkingTime },
+}
 </script>
 
 <style scoped lang="css">
+
 </style>

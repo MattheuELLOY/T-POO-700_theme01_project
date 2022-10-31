@@ -3,18 +3,19 @@
     <nav class="navbar">
       <div v-if="!user?.id" class="gap">
         <router-link to="/sign-up">Sign up</router-link>
-        <router-link to="/Login">Login</router-link>
+        <router-link to="/login">Login</router-link>
       </div>
       <div v-else class="gap">
-        <h3>{{ user.username }}</h3>
-        <select class="drop-down" @change="selected($event.target.value)">
-          <option
-                v-for="user in allUser"
-                :value="user.id"
-                :key="user.id">{{ user.id }}</option>
+        <router-link to="/">Home</router-link>
+        <select class="drop-down" @click="selecteUser($event.target.value)">
+          <option v-for="user in allUser" :value="user.id" :key="user.id">{{ user.username }}</option>
         </select>
-        <router-link to="/home">Home</router-link>
-        <router-link to="/create-user">Create User</router-link>
+        <select class="drop-down create" @click="selecteCreate($event.target.value)">
+          <option value="/home">Create</option>
+          <option value="/create-user">Create User</option>
+          <option value="/workingTime">Create Working Time</option>
+        </select>
+        <router-link :to="{name: 'WorkingTimes', params: { userid: user.id }}">Working times</router-link>
         <router-link to="/profile">Profile</router-link>
       </div>
     </nav>
@@ -22,11 +23,12 @@
 </template>
 
 <script lang="ts">
+import router from '@/router';
 import { useUserStore } from '@/store/user'
 import { computed, onMounted } from 'vue';
 
 export default {
-  setup () {
+  setup() {
     const userStore = useUserStore()
     const user = computed(() => userStore.user)
     const allUser = computed(() => userStore.allUser)
@@ -35,51 +37,74 @@ export default {
       userStore.getAll()
     })
 
-    function selected(id: number) {
+    function selecteUser(id: number) {
       userStore.get(id)
+    }
+
+    function selecteCreate(value: string) {
+      if (value === '/workingTime') {
+        router.push({ name: 'WorkingTime', params: { userid: user.value.id } })
+      } else {
+        router.push(value)
+      }
     }
 
     return {
       user,
       allUser,
-      selected
+      selecteUser,
+      selecteCreate
     }
   }
 }
 </script>
 
 <style scoped lang="css">
-  a {
-    text-decoration: none;
-    color: gray;
-  }
-  .navbar {
-    right: 0;
-    top: 0;
-    position: fixed;
-    box-sizing: border-box;
+a {
+  text-decoration: none;
+  color: gray;
+}
 
-    display:flex;
-    align-items: center;
-    justify-content: end;
+.navbar {
+  right: 0;
+  top: 0;
+  position: fixed;
+  box-sizing: border-box;
 
-    width: 100%;
-    min-height: 3rem;
-    padding-inline: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 
-    border-bottom: 0px solid;
-    box-shadow: 0px 0px 10px 0px;
-    background-color: white;
-  }
-  .drop-down {
-    padding: 5px;
+  width: 100%;
+  min-height: 3rem;
+  padding-inline: 2rem;
 
-    background-color: white;
-    border-color: rgb(175, 175, 175);
-    border-radius: 10px;
-  }
-  .gap {
-    display: flex;
-    gap: 1.5rem;
-  }
+  border-bottom: 0px solid;
+  box-shadow: 0px 0px 10px 0px;
+  background-color: white;
+}
+
+.drop-down {
+  padding: 5px;
+
+  background-color: white;
+  border-color: rgb(175, 175, 175);
+  border-radius: 10px;
+  outline: none;
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+}
+
+.create {
+  background-color: white;
+  color: gray;
+  border: 0px;
+}
+
+.gap {
+  display: flex;
+  gap: 1.5rem;
+}
 </style>
