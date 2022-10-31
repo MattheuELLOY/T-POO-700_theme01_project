@@ -1,4 +1,5 @@
 <template>
+  <div class = "content card-clock">
   <div>
   Clocks Time: {{clocks.time}}
   </div>
@@ -11,9 +12,10 @@
   <div>
     Email: {{users.email}}
   </div>
-  <button @click="onClick">
+  <button  class = "clock-btn" @click="onClick">
     Create Clock
   </button>
+  </div>
 </template>
 
 <script>
@@ -57,3 +59,35 @@ export default {
     }
 }
 </script>
+<style>
+.content {
+  min-width: 30rem;
+  min-height: 23rem;
+
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.card-clock {
+  flex-direction: column;
+
+  border: 0px solid;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.clock-btn {
+  padding: 10px;
+  border: 2px solid gainsboro;
+  background-color: white;
+  border-radius: 15px;
+}
+.clock-btn:hover {
+  cursor:pointer;
+  background-color: rgb(240, 240, 240);
+}
+.clock-btn:active {
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+  transform: translateY(3px);
+}
+</style>
