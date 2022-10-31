@@ -1,16 +1,17 @@
-FROM node:lts-alpine
-
-RUN npm install -g http-server
+FROM node:lts-alpine as build
+RUN mkdir /app
+COPY . /app
 
 WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
-
+COPY package.json ./
+COPY pnpm-lock.yaml ./
+RUN npm install -g pnpm
+RUN pnpm install
 COPY . .
+RUN pnpm build
 
-RUN npm run build
-
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+FROM nginx:stable-alpine as production
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY tools/nginx/default.conf /etc/nginx/conf.d/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
