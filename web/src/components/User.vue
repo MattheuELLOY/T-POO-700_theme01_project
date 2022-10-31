@@ -2,10 +2,6 @@
   <div>
     <div v-if="status !== 'delete'" class="content card-user">
       <h1>{{ title }}</h1>
-			<div v-if="status === 'update'">
-        <h2>User Id :</h2>
-        <input placeholder= "user id" v-model="userID" class="user-input"/>
-      </div>
       <div>
         <h2>Email :</h2>
         <input placeholder= "email" v-model="email" class="user-input"/>
@@ -20,10 +16,7 @@
     </div>
 		<div v-else class="content card-user">
 			<h1>{{ title }}</h1>
-			<div>
-        <h2>User Id :</h2>
-        <input placeholder= "user id" v-model="userID" class="user-input"/>
-      </div>
+      <h2>{{ user.username }}</h2>
 			<button class="user-btn" @click="onClick">
         {{ title }}
       </button>
@@ -32,7 +25,6 @@
 </template>
 
 <script lang="ts">
-import type { User } from '@/models/user'
 import { useUserStore } from '@/store/user'
 import { computed, reactive, toRefs } from 'vue'
 import {
@@ -52,8 +44,6 @@ export default {
   },
   setup (props) {
     const data = reactive({
-      user: {} as User,
-      userID: null,
       email: '' as string,
       username: '' as string
     });
@@ -76,27 +66,29 @@ export default {
     };
     function creatUser(): void {
       if (data.email && data.username) {
-        post(data.email, data.username)
-        user.value.id = -1
-        user.value.email = ""
-        user.value.username = ""
+        post(data.email, data.username).then(() => userStore.getAll())
+
+        data.email = ""
+        data.username = ""
+
         router.push('Home')
       }
     };
     function updateUser(): void {
-      if (data.userID && data.email && data.username) {
-        put(data.userID, data.email, data.username)
+      if (data.email && data.username) {
+        put(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
+
+        data.email = ""
+        data.username = ""
       }
     }
     function deleteUser(): void {
-      if (data.userID) {
-				deleted(data.userID)
-        router.push('Home')
-			}
+      deleted(user.value.id).then(() => { userStore.getAll(), userStore.delete() })
 		}
 
     return {
       ...toRefs(data),
+      user,
       onClick
     }
   }

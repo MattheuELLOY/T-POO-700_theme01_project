@@ -11,10 +11,15 @@ export const useUserStore = defineStore('user', {
 	},
 	actions: {
 		getAll(): void {
-			getAllUsers().then((response) => this.allUser = response.data.data)
+			getAllUsers().then((response) => this.allUser = <User[]>response.data.data)
 		},
 		get(id: number): void {
 			getUser(id).then((response) => this.user = response.data.data)
+		},
+		delete(): void {
+			this.user.id = -1
+			this.user.email = ""
+			this.user.username = ""
 		}
 	}
 })

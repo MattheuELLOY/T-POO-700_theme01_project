@@ -1,40 +1,57 @@
-import { createRouter, createMemoryHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import SignUpVue from '@/views/SignUp.vue'
 import LoginVue from '@/views/Login.vue'
 import HomeVue from '@/views/Home.vue'
 import ProfileVue from '@/views/Profile.vue'
+import CreateUserVue from '@/views/CreateUser.vue'
+import WorkingTimeBoard from '@/views/WorkingTimeBoard.vue'
+import WorkingTimeManagement from '@/views/WorkingTimeManagement.vue'
 
 const routes = [
 	{
 		path: '/',
-		name: '',
-		component: SignUpVue
+		name: 'Home',
+		component: HomeVue
 	},
 	{
 		path: '/sign-up',
-		name: 'SignUp',
+		name: 'sign-up',
 		component: SignUpVue
 	},
 	{
 		path: '/login',
-		name: 'Login',
+		name: 'login',
 		component: LoginVue
 	},
 	{
 		path: '/home',
-		name: 'Home',
+		name: 'home',
 		component: HomeVue
-	}
-	,
+	},
+	{
+		path: '/create-user',
+		name: 'create-user',
+		component: CreateUserVue
+	},
 	{
 		path: '/profile',
-		name: 'Profile',
+		name: 'profile',
 		component: ProfileVue
+	},
+	{
+		path: '/workingtime',
+		name: 'WorkingTime',
+		component: WorkingTimeManagement
+	},
+	{
+		path: '/workingtimes/',
+		name: 'WorkingTimes',
+		component: WorkingTimeBoard
 	}
 ]
 
 const router = createRouter({
-	history: createMemoryHistory(),
+	history: createWebHistory(),
 	routes
 })
 

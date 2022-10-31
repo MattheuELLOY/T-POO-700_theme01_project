@@ -15,9 +15,8 @@ export function getAllUsers(): Promise<User[]> {
   return HTTP.get('users')
 }
 
-export function post(email: string, username: string): void {
-  HTTP
-    .post('users', {
+export function post(email: string, username: string): Promise<void> {
+  return HTTP.post('users', {
       "user": {
         "email": email,
         "username": username
@@ -25,15 +24,14 @@ export function post(email: string, username: string): void {
     })
 }
 
-export function put(userID: number, email: string, username: string): void {
-  HTTP
-    .put('users' + userID, {
+export function put(userID: number, email: string, username: string): Promise<void> {
+  return HTTP.put('users/' + userID, {
       "user": {
         "email": email,
         "username": username
       }
     })
 }
-export function deleted(userID: number): void {
-  HTTP.delete('users/' + userID)
+export function deleted(userID: number): Promise<void> {
+  return HTTP.delete('users/' + userID)
 }
