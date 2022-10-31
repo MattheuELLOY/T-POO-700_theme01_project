@@ -3,6 +3,8 @@ defmodule ApiWeb.ClockController do
 
   alias Api.Clocks
   alias Api.Clocks.Clock
+  alias Api.Workingtimes
+  alias Api.Workingtimes.Workingtime
 
   action_fallback ApiWeb.FallbackController
 
@@ -11,17 +13,20 @@ defmodule ApiWeb.ClockController do
     render(conn, "index.json", clocks: clocks)
   end
 
-  def create(conn, %{"clock" => clock_params,"userId" => userId}) do
+  def create(conn, %{"userId" => userId}) do
+    time = NaiveDateTime.local_now ;
     exist = Clocks.if_clock_exist!(userId)
     cond do
       exist ->
       clock = Clocks.get_clock_by_user!(userId)
+      if (clock.status == true) do
+        Workingtimes.create_workingtime(%{"end" => time, "start" => clock.time, "user" => userId})
+      end
       Clocks.update_clock(clock, %{status: !clock.status})
       new_clock = Clocks.get_clock_by_user!(userId)
       render(conn, "show.json", clock: new_clock)
       !exist ->
-      completed_params = Map.put(clock_params, "user", userId)
-      with {:ok, %Clock{} = clock} <- Clocks.create_clock(completed_params) do
+      with {:ok, %Clock{} = clock} <- Clocks.create_clock(%{"time" => time, "user" => userId}) do
       conn
       |> put_status(:created)
       |> render("show.json", clock: clock)
