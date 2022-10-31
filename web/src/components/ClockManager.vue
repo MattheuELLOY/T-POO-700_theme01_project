@@ -11,6 +11,9 @@
   <div>
     Email: {{users.email}}
   </div>
+  <button @click="onClick">
+    Create Clock
+  </button>
 </template>
 
 <script>
@@ -18,6 +21,7 @@
 import {useClockStore} from "@/store/clock";
 import {useUserStore} from "@/store/user";
 import {computed, onMounted} from "vue";
+import {createClockByUserId} from "@/helpers/clock-helpers";
 
 export default {
   props: {
@@ -27,19 +31,29 @@ export default {
     username: String,
     email: String
   },
-  setup(props){
+  setup (props) {
     const clockStore = useClockStore();
     const userStore = useUserStore();
     onMounted(() => {
       clockStore.getClockByUserId(props.userId)
       userStore.get(props.userId)
-    })
+    });
     const clocks = computed(() => clockStore.clock)
-    const users = computed(() => userStore.user);
-    return {
-      clocks,
-      users
+    const users = computed(() => userStore.user)
+
+      function onClick() {
+        createClock()
+        console.log(props.userId)
+      };
+      function createClock() {
+        createClockByUserId(props.userId).then(() => clockStore.getClockByUserId(props.userId))
+      };
+
+      return {
+        clocks,
+        users,
+        onClick
+      };
     }
-  }
 }
 </script>

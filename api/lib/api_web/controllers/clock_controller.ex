@@ -11,7 +11,8 @@ defmodule ApiWeb.ClockController do
     render(conn, "index.json", clocks: clocks)
   end
 
-  def create(conn, %{"clock" => clock_params,"userId" => userId}) do
+  def create(conn, %{"userId" => userId}) do
+    time = NaiveDateTime.utc_now;
     exist = Clocks.if_clock_exist!(userId)
     cond do
       exist ->
@@ -20,8 +21,7 @@ defmodule ApiWeb.ClockController do
       new_clock = Clocks.get_clock_by_user!(userId)
       render(conn, "show.json", clock: new_clock)
       !exist ->
-      completed_params = Map.put(clock_params, "user", userId)
-      with {:ok, %Clock{} = clock} <- Clocks.create_clock(completed_params) do
+      with {:ok, %Clock{} = clock} <- Clocks.create_clock(%{"time" => time, "user" => userId}) do
       conn
       |> put_status(:created)
       |> render("show.json", clock: clock)

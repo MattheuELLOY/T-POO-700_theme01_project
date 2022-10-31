@@ -5,16 +5,11 @@ import user from "@/components/User.vue";
 
 export const useClockStore = defineStore('clock', {
 	state: () => ({
-			clock: {} as Clock,
-		    createClock: {} as Clock,
+			clock: {} as Clock
 	}),
 	actions: {
 		getClockByUserId(userId: number): void {
 			getClockByUserId(userId).then((response) => this.clock = response.data.data)
-		},
-		createClockByUserId(userId: number): void {
-			createClockByUserId(userId).then((response)) => this.createClock = response.data.data)
 		}
-
 	}
 })
