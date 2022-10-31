@@ -1,20 +1,20 @@
 import { defineStore } from 'pinia'
 import type { Clock } from '../models/clock'
-import axios from 'axios'
+import {createClockByUserId, getClockByUserId} from "@/helpers/clock-helpers";
+import user from "@/components/User.vue";
 
 export const useClockStore = defineStore('clock', {
 	state: () => ({
-			clock: {} as Clock
+			clock: {} as Clock,
+		    createClock: {} as Clock,
 	}),
 	actions: {
-		getClock(userID: number): Clock {
-			axios
-				.get('clocks/' + userID)
-				.then(response => (this.clock = response.data))
-			return this.clock
+		getClockByUserId(userId: number): void {
+			getClockByUserId(userId).then((response) => this.clock = response.data.data)
 		},
-		postClock(userID: number): void {
-			axios.post('clocks/' + userID)
+		createClockByUserId(userId: number): void {
+			createClockByUserId(userId).then((response)) => this.createClock = response.data.data)
 		}
+
 	}
 })

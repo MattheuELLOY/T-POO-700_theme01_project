@@ -1,7 +1,7 @@
 import type { User } from "./user";
 
 export interface Clock {
-    time: Date;
+    time: string;
     status: boolean;
-    user: User;
+    user: number;
 }

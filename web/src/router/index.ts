@@ -6,6 +6,7 @@ import ProfileVue from '@/views/Profile.vue'
 import CreateUserVue from '@/views/CreateUser.vue'
 import WorkingTimeBoard from '@/views/WorkingTimeBoard.vue'
 import WorkingTimeManagement from '@/views/WorkingTimeManagement.vue'
+import ClockVue from '@/views/Clocks.vue'
 
 const routes = [
 	{
@@ -47,6 +48,13 @@ const routes = [
 		path: '/workingtimes/',
 		name: 'WorkingTimes',
 		component: WorkingTimeBoard
+	}
+	,
+	{
+		path: '/clocks/:userId',
+		name: 'Clocks',
+		component: ClockVue,
+		props: (route: any) => ({ userId: Number(route.params.userId) }),
 	}
 ]
 

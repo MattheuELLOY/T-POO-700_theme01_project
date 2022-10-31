@@ -27,6 +27,7 @@ defmodule ApiWeb.Router do
 
      resources "/users", UserController, [:new, :edit]
 
+     get "/workingtimes/", WorkingtimeController, :index
      get "/workingtimes/:userId", WorkingtimeController, :index
      get "/workingtimes/:userId/:id", WorkingtimeController, :show
      post "/workingtimes/:userId", WorkingtimeController, :create
