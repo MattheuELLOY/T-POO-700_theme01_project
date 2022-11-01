@@ -1,27 +1,28 @@
 <template>
-  <div>
-    <table>
-      <thead>
-        <tr>
-          <th v-for="value in columns">
-            <span>{{ value }}</span>
+  <div class="container">
+    <ul class="responsive-table">
+      <li class="table-header">
+          <th>
+            <div class="col col-1">start</div>
+            <div class="col col-2">end</div>
+            <div class="col col-3">id</div>
+            <div class="col col-4">userId</div>
+            <div class="col col-5">Delete</div>
+            <div class="col col-6">Update</div>
           </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in allWorkingTime">
-          <td>
-            <span>{{ item.start }}</span>
-            <span>{{ item.end }}</span>
-            <span>{{ item.id }}</span>
-            <span>{{ item.user }}</span>
-            <span><button v-on:click="deleteWorkingTime(item.id)">Delete</button></span>
-            <span><button v-on:click="update(item.id)">Update</button></span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </li>
+      <li class="table-row" v-for="item in allWorkingTime">
+        <div class="col col-1" data-label="start">{{item.start}}</div>
+        <div class="col col-2" data-label="end">{{item.end}}</div>
+        <div class="col col-3" data-label="id">{{item.id}}</div>
+        <div class="col col-4" data-label="userId">{{item.user}}</div>
+        <button class="col col-5" style="background-color: #282e3c;" v-on:click="deleteWorkingTime(item.id)">Delete</button>
+        <button class="col col-6" style="background-color: #505c7c;" v-on:click="update(item.id)">Update</button>
+      </li>
+    </ul>
   </div>
+      <button style="background-color: #505c7c;" v-on:click="createWorkingTime()">Create</button>
+
 </template>
   
 <script lang="ts">
@@ -42,25 +43,29 @@ export default {
       userID: null,
       start: '',
       end: '',
-      listWorkingTime: {} as Array<Workingtime>,
-      columns: ["start", "end", "id", "userId", "Delete", "Update"],
+      listWorkingTime: {} as Array<Workingtime>
     });
     const workingTimeStore = useWorkingTime();
     const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
     workingTimeStore.getAll(<number>props.userid);
 
-    function deleteWorkingTime(idWorkingTime: number) {
+    function deleteWorkingTime(idWorkingTime : any) {
       deletedWorkingTime(idWorkingTime);
     }
-    function update(id: number) {
+    function update(id : any) {
       router.push({ name: 'workingtime', params: { status: 'edit' }})
+    }
+
+    function createWorkingTime(){
+      router.push({ name: 'workingtime', params: { status: 'new' }})
     }
 
     return {
       allWorkingTime,
       ...toRefs(data),
       deleteWorkingTime,
+      createWorkingTime,
       update,
     }
   }
@@ -68,51 +73,99 @@ export default {
 </script>
   
 <style scoped lang="css">
-.content {
-  min-width: 30rem;
-  min-height: 23rem;
-
-  margin: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+body {
+	 font-family: 'lato', sans-serif;
+   color: black;
+}
+ .container {
+  margin-top: 10%;
+	 width: 1000px;
+	 margin-left: auto;
+	 margin-right: auto;
+	 padding-left: 10px;
+	 padding-right: 10px;
+}
+ h2 {
+	 font-size: 26px;
+	 margin: 20px 0;
+	 text-align: center;
 }
 
-.card-user {
-  flex-direction: column;
-
-  border: 0px solid;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+li div{
+  color: black;
 }
 
-.user-input {
-  padding: 7px;
-  border: 2px solid gainsboro;
-  background-color: white;
-  border-radius: 15px;
+button{
+  padding: 0.5em;
+  border: 20px #6c7a89 ;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
 
-.user-btn {
-  padding: 10px;
-  border: 2px solid gainsboro;
-  background-color: white;
-  border-radius: 15px;
+ h2 small {
+	 font-size: 0.5em;
 }
-
-.user-btn:hover {
-  cursor: pointer;
-  background-color: rgb(240, 240, 240);
+ .responsive-table li {
+	 border-radius: 3px;
+	 padding: 25px 30px;
+	 display: flex;
+	 justify-content: space-between;
+	 margin-bottom: 25px;
 }
-
-.user-btn:active {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  transform: translateY(3px);
+ .responsive-table .table-header {
+	 background-color: #988829;
+	 font-size: 14px;
+	 text-transform: uppercase;
+	 letter-spacing: 0.03em;
 }
-
-td>span {
-  padding-left: 50px;
-
+ .responsive-table .table-row {
+	 background-color: #fff;
+	 box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+}
+ .responsive-table .col-1 {
+	 flex-basis: 30%;
+}
+ .responsive-table .col-2 {
+	 flex-basis: 30%;
+}
+ .responsive-table .col-3 {
+	 flex-basis: 10%;
+}
+ .responsive-table .col-4 {
+	 flex-basis: 10%;
+}
+.responsive-table .col-5 {
+	 flex-basis: 10%;
+   height: 100%;
+  width: 100%;
+}
+.responsive-table .col-6 {
+	 flex-basis: 10%;
+}
+ @media all and (max-width: 767px) {
+	 .responsive-table .table-header {
+		 display: none;
+	}
+	 .responsive-table li {
+		 display: block;
+	}
+	 .responsive-table .col {
+		 flex-basis: 100%;
+	}
+	 .responsive-table .col {
+		 display: flex;
+		 padding: 10px 0;
+	}
+	 .responsive-table .col:before {
+		 color: #6c7a89;
+		 padding-right: 10px;
+		 content: attr(data-label);
+		 flex-basis: 50%;
+		 text-align: right;
+	}
 }
 </style>
   
