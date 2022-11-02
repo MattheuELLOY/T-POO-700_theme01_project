@@ -15,23 +15,23 @@ export function getAllUsers(): Promise<User[]> {
   return HTTP.get('users')
 }
 
-export function post(email: string, username: string): Promise<void> {
+export function postUser(email: string, username: string): Promise<void> {
   return HTTP.post('users', {
-      "user": {
-        "email": email,
-        "username": username
-      }
-    })
+    "user": {
+      "email": email,
+      "username": username
+    }
+  })
 }
 
-export function put(userID: number, email: string, username: string): Promise<void> {
+export function putUser(userID: number, email: string, username: string): Promise<void> {
   return HTTP.put('users/' + userID, {
-      "user": {
-        "email": email,
-        "username": username
-      }
-    })
+    "user": {
+      "email": email,
+      "username": username
+    }
+  })
 }
-export function deleted(userID: number): Promise<void> {
+export function deletedUser(userID: number): Promise<void> {
   return HTTP.delete('users/' + userID)
 }

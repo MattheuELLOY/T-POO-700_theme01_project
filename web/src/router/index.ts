@@ -40,14 +40,16 @@ const routes = [
 		component: ProfileVue
 	},
 	{
-		path: '/workingtime',
+		path: '/workingTime/:userid',
 		name: 'WorkingTime',
-		component: WorkingTimeManagement
+		component: WorkingTimeManagement,
+		props: true
 	},
 	{
-		path: '/workingtimes/',
+		path: '/workingTimes/:userid',
 		name: 'WorkingTimes',
-		component: WorkingTimeBoard
+		component: WorkingTimeBoard,
+		props: true
 	}
 	,
 	{

@@ -1,26 +1,24 @@
 <template>
-  <div>
-    <div v-if="status !== 'delete'" class="content card-user">
-      <h1>{{ title }}</h1>
-      <div>
-        <h2>Email :</h2>
-        <input placeholder= "email" v-model="email" class="user-input"/>
-      </div>
-      <div>
-        <h2>Username :</h2>
-        <input placeholder="username" v-model="username" class="user-input"/>
-      </div>
-      <button class="user-btn" @click="onClick">
-        {{ title }}
-      </button>
+  <div v-if="status !== 'delete'" class="content card-user">
+    <h1>{{ title }}</h1>
+    <div>
+      <h2>Email :</h2>
+      <input placeholder= "email" v-model="email" class="user-input"/>
     </div>
-		<div v-else class="content card-user">
-			<h1>{{ title }}</h1>
-      <h2>{{ user.username }}</h2>
-			<button class="user-btn" @click="onClick">
-        {{ title }}
-      </button>
-		</div>
+    <div>
+      <h2>Username :</h2>
+      <input placeholder="username" v-model="username" class="user-input"/>
+    </div>
+    <button class="user-btn" @click="onClick">
+      {{ title }}
+    </button>
+  </div>
+  <div v-else class="content card-user">
+    <h1>{{ title }}</h1>
+    <h2>{{ user.username }}</h2>
+    <button class="user-btn" @click="onClick">
+      {{ title }}
+    </button>
   </div>
 </template>
 
@@ -28,12 +26,10 @@
 import { useUserStore } from '@/store/user'
 import { computed, reactive, toRefs } from 'vue'
 import {
-  getUser,
-  getByFilter,
-  getAllUsers,
-  post,
-  put,
-  deleted
+  postUser,
+  putUser,
+  deletedUser,
+getAllUsers
 } from '@/helpers/user-helper'
 import router from '@/router'
 
@@ -58,32 +54,30 @@ export default {
       } else if (props.status === 'delete'){
 				deleteUser()
 			} else {
-        user.value.id = -1
-        user.value.email = ""
-        user.value.username = ""
-        router.push('Home')
+        getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+        router.push('home')
       }
     };
     function creatUser(): void {
       if (data.email && data.username) {
-        post(data.email, data.username).then(() => userStore.getAll())
+        postUser(data.email, data.username).then(() => userStore.getAll())
 
         data.email = ""
         data.username = ""
 
-        router.push('Home')
+        router.push('home')
       }
     };
     function updateUser(): void {
       if (data.email && data.username) {
-        put(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
+        putUser(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
 
         data.email = ""
         data.username = ""
       }
     }
     function deleteUser(): void {
-      deleted(user.value.id).then(() => { userStore.getAll(), userStore.delete() })
+      deletedUser(user.value.id).then(() => { userStore.getAll(), userStore.delete() })
 		}
 
     return {
