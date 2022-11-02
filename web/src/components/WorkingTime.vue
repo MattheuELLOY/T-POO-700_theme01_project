@@ -1,7 +1,7 @@
 <template>
   <div class="content card-workingtime">
     <div>
-      <h1>Create new Working time for:</h1>
+      <h1>Working time for:</h1>
       <h2 style="text-align: center">{{ user.username }}</h2>
     </div>
     <div>
@@ -20,27 +20,28 @@
 </template>
   
 <script lang="ts">
-import { onMounted, reactive, toRefs } from 'vue'
+import { reactive, toRefs } from 'vue'
 import moment from 'moment'
 import router from '@/router'
 import { postWorkingTime, putWorkingTime } from '@/helpers/workingtime-helper';
-import { getUser } from '@/helpers/user-helper';
-import type { User } from '@/models/user';
 import Datepicker from '@vuepic/vue-datepicker';
+import { useUserStore } from '@/store/user';
+import { computed } from '@vue/reactivity';
 
 export default {
   props: {
-    userid: Number,
-    status: String
+    userId: Number,
+    workingtimeId: Number,
   },
   components: { Datepicker },
   setup(props) {
     const data = reactive({
-      user: {} as User,
       start: 0 as number,
       end: 0 as number
     });
-    getUser(<number>props.userid).then((response) => data.user = response.data.data)
+
+    const userStore = useUserStore()
+    const user = computed(() => userStore.user)
 
     // Mes méthoes
     function manageWorkingTime(start: Date, end: Date) {
@@ -48,18 +49,19 @@ export default {
       const endtStr = moment(end).format('YYYY-MM-DD hh:mm:ss')
 
       if (data.start && data.end) {
-        if (props.status === 'edit') {
-          putWorkingTime(<number>props.userid, startStr, endtStr)
+        if (props.workingtimeId) {
+          putWorkingTime(user.value.id, startStr, endtStr)
         } else {
-          postWorkingTime(<number>props.userid, startStr, endtStr)
+          postWorkingTime(user.value.id, startStr, endtStr)
         }
-        console.log('yes')
-        router.push('home')
+        data.start = 0
+        data.end = 0
       }
     }
 
     return {
       // Mes vars et méthodes à redonner au html
+      user,
       ...toRefs(data),
       manageWorkingTime
     }
