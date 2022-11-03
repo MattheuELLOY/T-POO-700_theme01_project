@@ -8,10 +8,12 @@
         <div class="text-center">
           {{user.email}}
         </div>
-        <div class="mb-10 mt-5">Hello, {{user.username}}. Today you have been working for</div>
-        <div class="mb-10 mt-10">I start my day at: {{workingtime.start}}</div>
+        <div class="mb-10 mt-5">Hello, {{user.username}}.</div>
+
+        <div class="mb-10 mt-10">Time: {{clocks.time}}</div>
+
         <div class="flex items-center justify-between">
-          <a class="text-xs text-gray-400 mr-1 hover:text-gray-800" href="#">My WorkingTimes</a>
+          <a class="text-xs text-gray-400 mr-1 hover:text-gray-800" :href=" 'http://localhost:5173/workingTimes/'+user.id ">My WorkingTimes</a>
           <div class="w-1/2">
             <label v-if="clocks.status==true" for="yellow-toggle" class="inline-flex relative items-center mr-5 cursor-pointer">
               <input @click="onClick" type="checkbox" value="{{clocks.status}}" id="yellow-toggle" class="sr-only peer" checked>
@@ -61,7 +63,6 @@ export default {
 
     const clocks = computed(() => clockStore.clock)
     const user = computed(() => userStore.user)
-    const workingtime = computed(() => workingTimeStore.allWorkingTime)
 
       function onClick() {
         createClock()
@@ -75,7 +76,6 @@ export default {
       return {
         clocks,
         user,
-        workingtime,
         onClick
       };
     }
