@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="allWorkingTime[0]?.id">
     <table>
       <thead>
         <tr>
@@ -34,7 +34,7 @@ import { deletedWorkingTime } from '@/helpers/workingtime-helper';
 
 export default {
   props: {
-    userid: Number
+    userId: Number
   },
   setup(props) {
     const data = reactive({
@@ -48,13 +48,13 @@ export default {
     const workingTimeStore = useWorkingTime();
     const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
-    workingTimeStore.getAll(<number>props.userid);
+    workingTimeStore.getAll(<number>props.userId);
 
     function deleteWorkingTime(idWorkingTime: number) {
-      deletedWorkingTime(idWorkingTime);
+      deletedWorkingTime(idWorkingTime).then(() => workingTimeStore.getAll(<number>props.userId));
     }
     function update(id: number) {
-      router.push({ name: 'workingtime', params: { status: 'edit' }})
+      router.push({ name: 'UpdateWorkingTime', params: { userId: <number>props.userId, workingtimeId: id }})
     }
 
     return {

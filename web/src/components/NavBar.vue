@@ -15,7 +15,7 @@
           <option value="/create-user">Create User</option>
           <option value="/workingTime">Create Working Time</option>
         </select>
-        <router-link :to="{name: 'WorkingTimes', params: { userid: user.id }}">Working times</router-link>
+        <router-link :to="{name: 'WorkingTimes', params: { userId: user.id }}">Working times</router-link>
         <router-link to="/profile">Profile</router-link>
       </div>
     </nav>
@@ -25,7 +25,9 @@
 <script lang="ts">
 import router from '@/router';
 import { useUserStore } from '@/store/user'
+import { useWorkingTime } from '@/store/workingTime';
 import { computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router'
 
 export default {
   setup() {
@@ -33,17 +35,32 @@ export default {
     const user = computed(() => userStore.user)
     const allUser = computed(() => userStore.allUser)
 
+    const workingTimeStore = useWorkingTime()
+
+    const route = useRoute()
+
     onMounted(() => {
       userStore.getAll()
     })
 
     function selecteUser(id: number) {
+      const actualRoute = route.path
+
       userStore.get(id)
+      workingTimeStore.getAll(id)
+
+      console.log(route.params.workingtimeId)
+
+      if (route.params.userId && route.params.workingtimeId) {
+        router.replace({ path: '/home' })
+      } else if (route.params.userId) {
+        router.push(actualRoute.slice(actualRoute.length, 1) + id)
+      }
     }
 
     function selecteCreate(value: string) {
       if (value === '/workingTime') {
-        router.push({ name: 'WorkingTime', params: { userid: user.value.id } })
+        router.push({ name: 'CreateWorkingTime', params: { userId: user.value.id } })
       } else {
         router.push(value)
       }

@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { useUserStore } from '@/store/user'
-import { computed, reactive, toRefs } from 'vue'
+import { computed, onMounted, reactive, toRefs } from 'vue'
 import {
   postUser,
   putUser,
@@ -46,6 +46,11 @@ export default {
     const userStore = useUserStore();
     const user = computed(() => userStore.user)
 
+    onMounted(() => {
+      if (props.status === 'create') {
+        getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+      }
+    })
     function onClick(): void {
       if (props.status === 'create') {
         creatUser()
