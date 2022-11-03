@@ -49,7 +49,11 @@ export default {
       userStore.get(id)
       workingTimeStore.getAll(id)
 
-      if (route.params.userId) {
+      console.log(route.params.workingtimeId)
+
+      if (route.params.userId && route.params.workingtimeId) {
+        router.replace({ path: '/home' })
+      } else if (route.params.userId) {
         router.push(actualRoute.slice(actualRoute.length, 1) + id)
       }
     }

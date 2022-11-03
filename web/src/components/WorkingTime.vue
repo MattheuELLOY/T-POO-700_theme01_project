@@ -20,9 +20,8 @@
 </template>
   
 <script lang="ts">
-import { reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs } from 'vue'
 import moment from 'moment'
-import router from '@/router'
 import { postWorkingTime, putWorkingTime } from '@/helpers/workingtime-helper';
 import Datepicker from '@vuepic/vue-datepicker';
 import { useUserStore } from '@/store/user';
@@ -42,6 +41,10 @@ export default {
 
     const userStore = useUserStore()
     const user = computed(() => userStore.user)
+
+    onMounted(() => {
+      userStore.get(<number>props.userId)
+    })
 
     // Mes méthoes
     function manageWorkingTime(start: Date, end: Date) {
