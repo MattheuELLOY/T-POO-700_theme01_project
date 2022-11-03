@@ -6,6 +6,8 @@ defmodule Api.Workingtimes.Workingtime do
     field :end, :naive_datetime
     field :start, :naive_datetime
     field :user, :id
+    field :validated, :boolean, default: false
+    field :team_id, :id
 
     timestamps()
   end

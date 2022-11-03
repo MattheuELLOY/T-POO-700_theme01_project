@@ -5,6 +5,9 @@ defmodule Api.Users.User do
   schema "users" do
     field :email, :string
     field :username, :string
+    field :role, :string
+    field :parameter, :id
+    field :password, :string
 
     timestamps()
   end
