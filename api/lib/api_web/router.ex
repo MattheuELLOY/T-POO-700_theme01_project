@@ -19,6 +19,7 @@ defmodule ApiWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
   end
 
   # Other scopes may use custom stacks.
@@ -36,6 +37,8 @@ defmodule ApiWeb.Router do
 
      get "/clocks/:userId", ClockController, :show
      post "/clocks/:userId", ClockController, :create
+
+     post "/register", AuthController, :register
   end
 
   # Enables LiveDashboard only for development
