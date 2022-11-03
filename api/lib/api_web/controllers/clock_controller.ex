@@ -22,7 +22,7 @@ defmodule ApiWeb.ClockController do
       if (clock.status == true) do
         Workingtimes.create_workingtime(%{"end" => time, "start" => clock.time, "user" => userId})
       end
-      Clocks.update_clock(clock, %{status: !clock.status})
+      Clocks.update_clock(clock, %{time: time, status: !clock.status})
       new_clock = Clocks.get_clock_by_user!(userId)
       render(conn, "show.json", clock: new_clock)
       !exist ->

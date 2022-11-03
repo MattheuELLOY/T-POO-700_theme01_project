@@ -56,7 +56,7 @@ const routes = [
 		path: '/clocks/:userId',
 		name: 'Clocks',
 		component: ClockVue,
-		props: (route: any) => ({ userId: Number(route.params.userId) }),
+		props: true
 	}
 ]
 

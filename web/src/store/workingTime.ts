@@ -9,8 +9,8 @@ export const useWorkingTime = defineStore('workingtime', {
 	}),
 	actions: {
 		getAll(idUser: number): void {
-			getWorkingTime(idUser).then((response) => this.allWorkingTime = <Workingtime[]>response.data.data)
-		},
+				getWorkingTime(idUser).then((response) => this.allWorkingTime = <Workingtime[]>response.data.data)
+			},
 		delete(): void {
 			this.workingtime.id = -1
 			this.workingtime.end = new Date()
