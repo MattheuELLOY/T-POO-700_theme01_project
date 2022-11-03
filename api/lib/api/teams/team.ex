@@ -4,7 +4,6 @@ defmodule Api.Teams.Team do
 
   schema "teams" do
     field :name, :string
-    field :user_id, :id
 
     timestamps()
   end

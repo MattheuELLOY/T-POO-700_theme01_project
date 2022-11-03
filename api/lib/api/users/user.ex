@@ -8,6 +8,7 @@ defmodule Api.Users.User do
     field :role, :string
     field :parameter, :id
     field :password, :string
+    field :team_id, :id
 
     timestamps()
   end
