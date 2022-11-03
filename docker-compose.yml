@@ -1,39 +1,40 @@
-version: '3.6'
+version : '3'
 services:
-  adminer:
-    image: adminer
-    restart: always
-    environment:
-        ADMINER_DESIGN: mvt
-        ADMINER_DEFAULT_SERVER: db
-    depends_on:
-      - db
-    networks:
-      - db
-    ports:
-      - 8080:8080
-
-  portainer:
-    image: portainer/portainer-ce
-    volumes:
-        - ./portainer:/data
-        - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-        - 9000:9000
-  db:
-    image: postgres
-    environment:
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_DB: ${POSTGRES_DATABASE}
-        PGDATA: /data/postgres
-    volumes:
-      - db:/data/postgres
-    ports:
-        - '5432:5432'
-    networks:
-        - db
+    api:
+        container_name: timemanager_api
+        image: api-t-poo-700
+        build:
+            context: ./api
+        environment:
+            PGUSER: postgres
+            PGPASSWORD: postgres
+            PGDATABASE: api_dev
+            PGPORT: 5432
+            PGHOST: db
+        ports:
+            - "4000:4000"
+        depends_on:
+            - db
+    db:
+        container_name: timemanager_db
+        image: postgres:9.6
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            PGDATA: /var/lib/postgresql/data/pgdata
+        restart: always
+        volumes:
+            - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
+            - "dbdata:/var/lib/postgresql/data"
+    my-app:
+      container_name: web
+      build:
+        context: ./web
+        dockerfile: Dockerfile
+      volumes:
+        - '.:/web'
+        - '/web/node_modules'
+      ports:
+        - '8080:8080'
 volumes:
-  db:
-networks:
-  db:
+    dbdata:
