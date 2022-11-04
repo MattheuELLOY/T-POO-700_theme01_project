@@ -4,6 +4,7 @@ defmodule ApiWeb.AuthController do
   alias Api.Users
   alias Api.Users.User
   alias ApiWeb.Utils
+  alias ApiWeb.JWTToken
 
   def register(conn, params) do
     case Users.create_user(params) do
@@ -17,5 +18,19 @@ defmodule ApiWeb.AuthController do
         conn |> render("error.json", %{error: Utils.internal_server_error()})
 
     end
+  end
+
+  def login(conn, %{"email" => email, "password" => password}) do
+    with %User{} = user <- Users.get_user_by_userCredentials(email),
+    true <- Pbkdf2.verify_pass(password, user.password)
+    do
+      signer = Joken.Signer.create("HS256","d1KJ/oxkRv2KyIqBn+eUvrgBnNEIXei8hfCkthPBxB1kY9rTa4c07OlzrojbE4z0")
+      extra_claims = %{user_id: user.id}
+      {:ok, token, _claims} = JWTToken.generate_and_sign(extra_claims, signer)
+      {:ok, _claims} = JWTToken.verify_and_validate(token, signer)
+      conn |> render("login.json", %{success: true, message: "Login Successful", token: token})
+    else
+    _-> conn |> render("error.json", %{error: Utils.invalid_credentials()})
+  end
   end
 end

@@ -15,6 +15,10 @@ defmodule ApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug ApiWeb.JWTAuthPlug
+    end
+
   scope "/", ApiWeb do
     pipe_through :browser
 
@@ -39,6 +43,8 @@ defmodule ApiWeb.Router do
      post "/clocks/:userId", ClockController, :create
 
      post "/register", AuthController, :register
+     post "/register", AuthController, :register
+     post "/login", AuthController, :login
   end
 
   # Enables LiveDashboard only for development
