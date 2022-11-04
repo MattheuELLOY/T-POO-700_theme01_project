@@ -7,6 +7,8 @@ defmodule Api.Users.User do
     field :username, :string
     field :password, :string
     field :role, :string, default: "user"
+    field :parameter, :id
+    field :team_id, :id
 
     timestamps()
   end
@@ -14,7 +16,7 @@ defmodule Api.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :role, :password])
+    |> cast(attrs, [:username, :email, :role, :password, :parameter, :team_id])
     |> validate_required([:username, :email, :role, :password])
     |> validate_length(:username, min: 2, max: 20)
     |> validate_length(:password, min: 6, max: 30)

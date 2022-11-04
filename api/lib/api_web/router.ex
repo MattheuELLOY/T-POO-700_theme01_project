@@ -27,6 +27,8 @@ defmodule ApiWeb.Router do
      pipe_through :api
 
      resources "/users", UserController, [:new, :edit]
+     resources "/teams", TeamController, [:new, :edit]
+     resources "/parameters", ParameterController, [:new, :edit]
 
      get "/workingtimes/", WorkingtimeController, :index
      get "/workingtimes/:userId", WorkingtimeController, :index
