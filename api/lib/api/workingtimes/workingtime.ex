@@ -1,6 +1,8 @@
 defmodule Api.Workingtimes.Workingtime do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Api.Users.User
+
 
   schema "workingtimes" do
     field :end, :naive_datetime
@@ -8,6 +10,8 @@ defmodule Api.Workingtimes.Workingtime do
     field :user, :id
     field :validated, :boolean, default: false
     field :team_id, :id
+
+    belongs_to :users, User
 
     timestamps()
   end

@@ -14,11 +14,10 @@ defmodule ApiWeb.UserView do
     %{
       id: user.id,
       username: user.username,
-      email: user.email,
-      password: user.password,
       parameter: user.parameter,
-      role: user.role,
       team_id: user.team_id
+      email: user.email,
+      role: user.role
     }
   end
 end
