@@ -15,7 +15,9 @@ defmodule ApiWeb.WorkingtimeView do
       id: workingtime.id,
       start: workingtime.start,
       end: workingtime.end,
-      user: workingtime.user
+      user: workingtime.user,
+      validated: workingtime.validated,
+      team_id: workingtime.team_id
     }
   end
 end
