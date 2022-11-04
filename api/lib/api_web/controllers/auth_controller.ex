@@ -27,10 +27,13 @@ defmodule ApiWeb.AuthController do
       signer = Joken.Signer.create("HS256","d1KJ/oxkRv2KyIqBn+eUvrgBnNEIXei8hfCkthPBxB1kY9rTa4c07OlzrojbE4z0")
       extra_claims = %{user_id: user.id}
       {:ok, token, _claims} = JWTToken.generate_and_sign(extra_claims, signer)
-      {:ok, _claims} = JWTToken.verify_and_validate(token, signer)
       conn |> render("login.json", %{success: true, message: "Login Successful", token: token})
     else
     _-> conn |> render("error.json", %{error: Utils.invalid_credentials()})
   end
+  end
+
+  def get(conn, _params) do
+    conn |> render("data.json", %{data: conn.assigns.current_user})
   end
 end

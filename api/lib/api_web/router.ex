@@ -19,6 +19,13 @@ defmodule ApiWeb.Router do
     plug ApiWeb.JWTAuthPlug
     end
 
+#    PROTECTED
+  scope "/api/auth", ApiWeb do
+    pipe_through :auth
+    get "/", AuthController, :get
+#    PLACE FOR PROTECTED ROUTES
+    end
+
   scope "/", ApiWeb do
     pipe_through :browser
 
