@@ -1,32 +1,38 @@
 <template>
-  <barChartVue v-bind:width='600' v-bind:height='300' />
+  <div class="">
+    <barChartVue v-bind:width='375' v-bind:height='250' />
+    <doughnutChartVue v-bind:width='375' v-bind:height='250' />
+  </div>
 </template>
 
 <script lang="ts">
 import barChartVue from '@/components/barChart.vue';
-import { getAllUsers } from '@/helpers/user-helper';
+import doughnutChartVue from '@/components/doughnutChart.vue';
 import { useUserStore } from '@/store/user';
 import { useWorkingTime } from '@/store/workingTime';
-import { computed } from '@vue/reactivity';
 import { defineComponent, onMounted } from 'vue';
 
 export default defineComponent({
   name: 'Home',
   components: {
-    barChartVue
+    barChartVue,
+    doughnutChartVue
   },
   props: {
     userId: Number
   },
   setup(props) {
     const userStore = useUserStore()
+    const workingTimeStore = useWorkingTime()
 
     onMounted(() => {
       userStore.get(<number>props.userId)
+      workingTimeStore.getAll(<number>props.userId)
     })
   }
 })
 </script>
 
 <style scoped lang="css">
+
 </style>

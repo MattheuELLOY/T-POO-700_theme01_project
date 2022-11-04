@@ -6,7 +6,7 @@
         <router-link to="/login">Login</router-link>
       </div>
       <div v-else class="gap">
-        <router-link to="/">Home</router-link>
+        <router-link :to="{name: 'chartManager', params: { userId: user.id }}">Charte Manager</router-link>
         <select class="drop-down" @click="selecteUser($event.target.value)">
           <option v-for="user in allUser" :value="user.id" :key="user.id">{{ user.username }}</option>
         </select>
@@ -52,7 +52,7 @@ export default {
       workingTimeStore.getAll(id)
 
       if (route.params.userId && route.params.workingtimeId) {
-        router.replace({ path: '/chartManager' })
+        router.replace({name: 'WorkingTimes', params: { userId: user.value.id }})
       } else if (route.params.userId) {
         router.push(actualRoute.slice(actualRoute.length, 1) + id)
       }
@@ -61,6 +61,8 @@ export default {
     function selecteCreate(value: string) {
       if (value === '/workingTime') {
         router.push({ name: 'CreateWorkingTime', params: { userId: user.value.id } })
+      } else if (value === '/chartManager') {
+        router.push({ name: 'chartManager', params: { userId: user.value.id } })
       } else {
         router.push(value)
       }
