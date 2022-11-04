@@ -1,30 +1,14 @@
 <template>
-  <Bar  :chart-options="chartOptions"
-        :chart-data="chartData"
-        :width="width"
-        :height="height"/>
-  {{ moment(workingTime[0]?.end).hours().valueOf() }}
+  <Bar :chart-options="chartOptions" :chart-data="chartData" :width="width" :height="height"/>
 </template>
 
 <script lang="ts">
-
 import { defineComponent} from 'vue'
-
 import { Bar } from 'vue-chartjs'
-
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-} from 'chart.js'
-import { computed, reactive } from '@vue/reactivity'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { computed } from 'vue'
 import { useWorkingTime } from '@/store/workingTime'
 import moment from 'moment'
-import type { Workingtime } from '@/models/workingtime'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -48,37 +32,37 @@ export default defineComponent({
     }
   },
   setup() {
-    const data = reactive({
-      allWorkingTime: [] as Workingtime[],
-      dataWorkingTime: [] as number[]
-    })
-
     const workingTimeStore = useWorkingTime()
-    const workingTime = computed(() => workingTimeStore.allWorkingTime)
+    const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
-    const chartData = {
-      labels: [
-        'Lundi',
-        'Mardi',
-        'Mercredi',
-        'Jeudi',
-        'Vendredi',
-      ],
-      datasets: [
-        {
-          label: 'Heure',
-          backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#f87979'],
-          data: data.dataWorkingTime
-        }
-      ]
-    }
-
-    data.allWorkingTime = workingTime.value
-    data.allWorkingTime.forEach((workingTime) => {
-      data.dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hours'))
+    var dataWorkingTime: number[] = []
+    const dataWorkingTimes = computed(() => {
+      dataWorkingTime = []
+      const sortedArray = allWorkingTime.value.sort((a, b) => moment(a.start).diff(b.start))
+      for(const workingTime of sortedArray) {
+        dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hour'))
+      }
+      return dataWorkingTime
     })
 
-    data.dataWorkingTime = data.dataWorkingTime.sort((a, b) => a.valueOf() - b.valueOf())
+    const chartData = computed(() => {
+      return {
+        labels: [
+          'Lundi',
+          'Mardi',
+          'Mercredi',
+          'Jeudi',
+          'Vendredi',
+        ],
+        datasets: [
+          {
+            label: 'Heure',
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#f87979'],
+            data: dataWorkingTimes.value
+          }
+        ]
+      }
+    })
 
     const chartOptions = {
       responsive: true
@@ -87,8 +71,6 @@ export default defineComponent({
     return {
       chartData,
       chartOptions,
-      workingTime,
-      moment
     }
   }
 })
