@@ -23,6 +23,7 @@ defmodule ApiWeb.Router do
   scope "/api/auth", ApiWeb do
     pipe_through :auth
     get "/", AuthController, :get
+    delete "/", AuthController, :delete
 #    PLACE FOR PROTECTED ROUTES
     end
 

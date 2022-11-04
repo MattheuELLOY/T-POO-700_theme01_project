@@ -52,7 +52,13 @@ defmodule Api.Users do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  def get_user(id), do: Repo.get(User, id)
+  def get_user(id) do
+    from(
+      u in User,
+      where: u.id == ^id
+    )
+    |> Repo.one()
+    end
 
   def get_user_by_userCredentials(email) do
     from(

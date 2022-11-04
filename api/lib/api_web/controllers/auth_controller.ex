@@ -1,10 +1,13 @@
 defmodule ApiWeb.AuthController do
   use ApiWeb, :controller
-
+  import Ecto.Query, warn: false
+  import Plug.Conn
   alias Api.Users
   alias Api.Users.User
   alias ApiWeb.Utils
   alias ApiWeb.JWTToken
+  alias Api.AuthTokens.AuthToken
+  alias Api.Repo
 
   def register(conn, params) do
     case Users.create_user(params) do
@@ -35,5 +38,23 @@ defmodule ApiWeb.AuthController do
 
   def get(conn, _params) do
     conn |> render("data.json", %{data: conn.assigns.current_user})
+  end
+
+  def delete(conn, _params) do
+    case Ecto.build_assoc(conn.assigns.current_user, :auth_tokens, %{token: get_token(conn)})
+      |> Repo.insert!() do
+      %AuthToken{} -> conn |> render("ack.json", %{success: true, message: "Logged Out"})
+      _-> conn |> render("error.json", %{error: Utils.internal_server_error()})
+      end
+
+  end
+
+  defp get_token(conn) do
+      bearer = get_req_header(conn, "authorization") |> List.first()
+      if bearer == nil do
+        ""
+      else
+         bearer |> String.split(" ") |> List.last()
+     end
   end
 end

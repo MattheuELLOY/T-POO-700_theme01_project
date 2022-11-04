@@ -1,13 +1,18 @@
 defmodule Api.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Api.AuthTokens.AuthToken
+  alias Api.Workingtimes.Workingtime
 
-    @derive {Jason.Encoder, except: [:__meta__]}
+    @derive {Jason.Encoder, except: [:__meta__, :auth_tokens, :password, :workingtimes]}
   schema "users" do
     field :email, :string
     field :username, :string
     field :password, :string
     field :role, :string, default: "user"
+
+    has_many :auth_tokens, AuthToken
+    has_many :workingtimes, Workingtime
 
     timestamps()
   end
