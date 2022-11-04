@@ -6,8 +6,9 @@ defmodule Api.Repo.Migrations.CreateWorkingtimes do
       add :start, :naive_datetime
       add :end, :naive_datetime
       add :validated, :boolean, default: false
-      add :team_id ,references(:teams, on_delete: :delete_all)
-      add :user, references(:users, on_delete: :delete_all)
+      add :team_id ,references(:teams, on_delete: :nothing)
+      add :user, references(:users, on_delete: :nothing)
+
 
       timestamps()
     end

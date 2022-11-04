@@ -7,8 +7,7 @@ defmodule Api.Clocks.Clock do
     field :status, :boolean, default: true
     field :time, :naive_datetime
     field :user, :id
-
-    belongs_to :users, User
+#    belongs_to :users, User
 
     timestamps()
   end

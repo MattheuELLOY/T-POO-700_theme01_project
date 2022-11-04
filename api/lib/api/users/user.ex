@@ -7,7 +7,7 @@ defmodule Api.Users.User do
   alias Api.Parameters.Parameter
   alias Api.Teams.Team
 
-    @derive {Jason.Encoder, except: [:__meta__, :auth_tokens, :password, :workingtimes]}
+    @derive {Jason.Encoder, except: [:__meta__, :auth_tokens, :password]}
   schema "users" do
     field :email, :string
     field :username, :string
@@ -17,10 +17,10 @@ defmodule Api.Users.User do
     field :team_id, :id
 
     has_many :auth_tokens, AuthToken
-    has_many :workingtimes, Workingtime
-    has_many :clocks, Clock
-    has_many :paramaters, Parameter
-    has_many :teams, Team
+#    has_many :workingtimes, Workingtime
+#    has_many :clocks, Clock
+#    has_many :paramaters, Parameter
+#    has_many :teams, Team
 
     timestamps()
   end

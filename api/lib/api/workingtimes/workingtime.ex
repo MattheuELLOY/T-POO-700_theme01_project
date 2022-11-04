@@ -11,7 +11,7 @@ defmodule Api.Workingtimes.Workingtime do
     field :validated, :boolean, default: false
     field :team_id, :id
 
-    belongs_to :users, User
+#    belongs_to :users, User
 
     timestamps()
   end
