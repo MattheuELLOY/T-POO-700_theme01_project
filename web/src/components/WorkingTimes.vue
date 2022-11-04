@@ -25,11 +25,9 @@
 </template>
   
 <script lang="ts">
-import { reactive } from 'vue'
-import type { Workingtime } from '@/models/workingtime'
 import { useWorkingTime } from '@/store/workingTime';
 import router from '@/router'
-import { computed, toRefs } from '@vue/reactivity';
+import { computed } from '@vue/reactivity';
 import { deletedWorkingTime } from '@/helpers/workingtime-helper';
 
 export default {
@@ -37,14 +35,6 @@ export default {
     userId: Number
   },
   setup(props) {
-    const data = reactive({
-      workinTime: {} as Workingtime,
-      userID: null,
-      start: '',
-      end: '',
-      listWorkingTime: {} as Array<Workingtime>,
-      columns: ["start", "end", "id", "userId", "Delete", "Update"],
-    });
     const workingTimeStore = useWorkingTime();
     const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
@@ -59,7 +49,7 @@ export default {
 
     return {
       allWorkingTime,
-      ...toRefs(data),
+      columns: ["start", "end", "id", "userId", "Delete", "Update"],
       deleteWorkingTime,
       update,
     }
