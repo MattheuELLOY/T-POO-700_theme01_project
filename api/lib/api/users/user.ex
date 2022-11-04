@@ -3,6 +3,9 @@ defmodule Api.Users.User do
   import Ecto.Changeset
   alias Api.AuthTokens.AuthToken
   alias Api.Workingtimes.Workingtime
+  alias Api.Clocks.Clock
+  alias Api.Parameters.Parameter
+  alias Api.Teams.Team
 
     @derive {Jason.Encoder, except: [:__meta__, :auth_tokens, :password, :workingtimes]}
   schema "users" do
@@ -15,6 +18,9 @@ defmodule Api.Users.User do
 
     has_many :auth_tokens, AuthToken
     has_many :workingtimes, Workingtime
+    has_many :clocks, Clock
+    has_many :paramaters, Parameter
+    has_many :teams, Team
 
     timestamps()
   end

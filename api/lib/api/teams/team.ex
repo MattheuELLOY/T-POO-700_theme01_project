@@ -1,9 +1,12 @@
 defmodule Api.Teams.Team do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Api.Users.User
 
   schema "teams" do
     field :name, :string
+
+    belongs_to :users, User
 
     timestamps()
   end

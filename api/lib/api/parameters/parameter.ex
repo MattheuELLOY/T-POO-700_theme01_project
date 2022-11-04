@@ -1,12 +1,15 @@
 defmodule Api.Parameters.Parameter do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Api.Users.User
 
   schema "parameters" do
     field :allowed_to_modify_WT, :boolean, default: false
     field :daily_hours, :float
     field :day_per_week, :float
     field :filling_mode, :string
+
+    belongs_to :users, User
 
     timestamps()
   end
