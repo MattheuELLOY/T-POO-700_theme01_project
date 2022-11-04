@@ -60,7 +60,7 @@ export default {
 				deleteUser()
 			} else {
         getAllUsers().then((response) => userStore.get(response.data.data[0].id))
-        router.push('home')
+        router.push('chartManager')
       }
     };
     function creatUser(): void {
@@ -70,7 +70,7 @@ export default {
         data.email = ""
         data.username = ""
 
-        router.push('home')
+        router.push('chartManager')
       }
     };
     function updateUser(): void {

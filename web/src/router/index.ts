@@ -25,9 +25,10 @@ const routes = [
 		component: LoginVue
 	},
 	{
-		path: '/home',
-		name: 'home',
-		component: HomeVue
+		path: '/chartManager/:userId',
+		name: 'chartManager',
+		component: HomeVue,
+		props: true
 	},
 	{
 		path: '/create-user',

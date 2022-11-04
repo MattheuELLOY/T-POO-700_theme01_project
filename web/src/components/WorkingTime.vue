@@ -23,7 +23,6 @@
 import { onMounted, reactive, toRefs } from 'vue'
 import moment from 'moment'
 import { postWorkingTime, putWorkingTime } from '@/helpers/workingtime-helper';
-import Datepicker from '@vuepic/vue-datepicker';
 import { useUserStore } from '@/store/user';
 import { computed } from '@vue/reactivity';
 
@@ -32,7 +31,6 @@ export default {
     userId: Number,
     workingtimeId: Number,
   },
-  components: { Datepicker },
   setup(props) {
     const data = reactive({
       start: 0 as number,
@@ -48,12 +46,12 @@ export default {
 
     // Mes méthoes
     function manageWorkingTime(start: Date, end: Date) {
-      const startStr = moment(start).format('YYYY-MM-DD hh:mm:ss')
-      const endtStr = moment(end).format('YYYY-MM-DD hh:mm:ss')
+      const startStr = moment(start).format('YYYY-MM-DD HH:mm:ss')
+      const endtStr = moment(end).format('YYYY-MM-DD HH:mm:ss')
 
       if (data.start && data.end) {
         if (props.workingtimeId) {
-          putWorkingTime(user.value.id, startStr, endtStr)
+          putWorkingTime(<number>props.workingtimeId, startStr, endtStr)
         } else {
           postWorkingTime(user.value.id, startStr, endtStr)
         }

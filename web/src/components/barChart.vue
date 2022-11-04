@@ -1,10 +1,14 @@
 <template>
-  <Bar/>
+  <Bar  :chart-options="chartOptions"
+        :chart-data="chartData"
+        :width="width"
+        :height="height"/>
+  {{ moment(workingTime[0]?.end).hours().valueOf() }}
 </template>
 
 <script lang="ts">
 
-import { defineComponent, h, type PropType } from 'vue'
+import { defineComponent} from 'vue'
 
 import { Bar } from 'vue-chartjs'
 
@@ -16,8 +20,11 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-  type Plugin
 } from 'chart.js'
+import { computed, reactive } from '@vue/reactivity'
+import { useWorkingTime } from '@/store/workingTime'
+import moment from 'moment'
+import type { Workingtime } from '@/models/workingtime'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -38,56 +45,51 @@ export default defineComponent({
     height: {
       type: Number,
       default: 300
-    },
-    cssClasses: {
-      default: '',
-      type: String
-    },
-    styles: {
-      type: Object as PropType<Partial<CSSStyleDeclaration>>,
-      default: () => {}
-    },
-    plugins: {
-      type: Array as PropType<Plugin<'bar'>[]>,
-      default: () => []
     }
   },
-  setup(props) {
+  setup() {
+    const data = reactive({
+      allWorkingTime: [] as Workingtime[],
+      dataWorkingTime: [] as number[]
+    })
+
+    const workingTimeStore = useWorkingTime()
+    const workingTime = computed(() => workingTimeStore.allWorkingTime)
+
     const chartData = {
       labels: [
-        'lindi',
+        'Lundi',
         'Mardi',
         'Mercredi',
         'Jeudi',
         'Vendredi',
-        'Samedi',
-        'Dimanche',
       ],
       datasets: [
         {
           label: 'Heure',
-          backgroundColor: '#f87979',
-          data: [8, 7, 7, 3, 0, 0, 0]
+          backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#f87979'],
+          data: data.dataWorkingTime
         }
       ]
     }
 
+    data.allWorkingTime = workingTime.value
+    data.allWorkingTime.forEach((workingTime) => {
+      data.dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hours'))
+    })
+
+    data.dataWorkingTime = data.dataWorkingTime.sort((a, b) => a.valueOf() - b.valueOf())
+
     const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false
+      responsive: true
     }
 
-    return () =>
-      h(Bar, {
-        chartData,
-        chartOptions,
-        chartId: props.chartId,
-        width: props.width,
-        height: props.height,
-        cssClasses: props.cssClasses,
-        styles: props.styles,
-        plugins: props.plugins
-      })
+    return {
+      chartData,
+      chartOptions,
+      workingTime,
+      moment
+    }
   }
 })
 </script>

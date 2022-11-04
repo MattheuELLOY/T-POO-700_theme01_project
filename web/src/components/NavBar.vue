@@ -11,7 +11,7 @@
           <option v-for="user in allUser" :value="user.id" :key="user.id">{{ user.username }}</option>
         </select>
         <select class="drop-down create" @click="selecteCreate($event.target.value)">
-          <option value="/home">Create</option>
+          <option value="/chartManager">Create</option>
           <option value="/create-user">Create User</option>
           <option value="/workingTime">Create Working Time</option>
         </select>
@@ -23,6 +23,7 @@
 </template>
 
 <script lang="ts">
+import { getAllUsers } from '@/helpers/user-helper';
 import router from '@/router';
 import { useUserStore } from '@/store/user'
 import { useWorkingTime } from '@/store/workingTime';
@@ -41,6 +42,7 @@ export default {
 
     onMounted(() => {
       userStore.getAll()
+      getAllUsers().then((response) => userStore.get(response.data.data[0].id))
     })
 
     function selecteUser(id: number) {
@@ -49,10 +51,8 @@ export default {
       userStore.get(id)
       workingTimeStore.getAll(id)
 
-      console.log(route.params.workingtimeId)
-
       if (route.params.userId && route.params.workingtimeId) {
-        router.replace({ path: '/home' })
+        router.replace({ path: '/chartManager' })
       } else if (route.params.userId) {
         router.push(actualRoute.slice(actualRoute.length, 1) + id)
       }
