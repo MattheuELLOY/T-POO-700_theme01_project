@@ -15,7 +15,7 @@ import {
   CategoryScale,
 } from 'chart.js'
 import { useWorkingTime } from '@/store/workingTime'
-import moment from 'moment'
+import moment, { relativeTimeRounding } from 'moment'
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 
@@ -54,12 +54,12 @@ export default defineComponent({
         datasets: [
           {
             backgroundColor: ['#00D8FF', '#bcbcbc'],
+            borderColor: 'transparent',
             data: [workingTime, restWorkingTime]
           }
         ]
       }
     })
-
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false

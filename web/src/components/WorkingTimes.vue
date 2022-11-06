@@ -58,48 +58,6 @@ export default {
 </script>
   
 <style scoped lang="css">
-.content {
-  min-width: 30rem;
-  min-height: 23rem;
-
-  margin: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
-.card-user {
-  flex-direction: column;
-
-  border: 0px solid;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.user-input {
-  padding: 7px;
-  border: 2px solid gainsboro;
-  background-color: white;
-  border-radius: 15px;
-}
-
-.user-btn {
-  padding: 10px;
-  border: 2px solid gainsboro;
-  background-color: white;
-  border-radius: 15px;
-}
-
-.user-btn:hover {
-  cursor: pointer;
-  background-color: rgb(240, 240, 240);
-}
-
-.user-btn:active {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  transform: translateY(3px);
-}
-
 td>span {
   padding-left: 50px;
 

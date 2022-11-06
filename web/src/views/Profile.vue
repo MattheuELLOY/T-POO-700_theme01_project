@@ -29,6 +29,6 @@ export default defineComponent({
 <style scoped lang="css">
   .profile-content {
     display: flex;
-    gap: 5rem;
+    flex-direction: column;
   }
 </style>
