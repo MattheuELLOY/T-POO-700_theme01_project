@@ -4,9 +4,8 @@ COPY . /app
 
 WORKDIR /app
 COPY package.json ./
-RUN npm install -g pnpm
-RUN pnpm install
-
+RUN npm install
+RUN npm run build
 FROM nginx:stable-alpine as production
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
