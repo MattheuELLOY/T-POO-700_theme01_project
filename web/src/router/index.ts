@@ -7,6 +7,7 @@ import CreateUserVue from '@/views/CreateUser.vue'
 import WorkingTimeVue from '@/components/WorkingTime.vue'
 import WorkingTimesVue from '@/components/WorkingTimes.vue'
 import ClockVue from '@/views/Clocks.vue'
+import ParametersVue from '@/views/Parameters.vue'
 
 const routes = [
 	{
@@ -61,6 +62,12 @@ const routes = [
 		path: '/clocks/:userId',
 		name: 'Clocks',
 		component: ClockVue,
+		props: true
+	},
+	{
+		path: '/parameters/:userId',
+		name: 'Parameters',
+		component: ParametersVue,
 		props: true
 	}
 ]
