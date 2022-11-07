@@ -1,23 +1,14 @@
 <template>
-  <Bar/>
+  <Bar :chart-options="chartOptions" :chart-data="chartData" :width="width" :height="height"/>
 </template>
 
 <script lang="ts">
-
-import { defineComponent, h, type PropType } from 'vue'
-
+import { defineComponent} from 'vue'
 import { Bar } from 'vue-chartjs'
-
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  type Plugin
-} from 'chart.js'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { computed } from 'vue'
+import { useWorkingTime } from '@/store/workingTime'
+import moment from 'moment'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -38,56 +29,49 @@ export default defineComponent({
     height: {
       type: Number,
       default: 300
-    },
-    cssClasses: {
-      default: '',
-      type: String
-    },
-    styles: {
-      type: Object as PropType<Partial<CSSStyleDeclaration>>,
-      default: () => {}
-    },
-    plugins: {
-      type: Array as PropType<Plugin<'bar'>[]>,
-      default: () => []
     }
   },
-  setup(props) {
-    const chartData = {
-      labels: [
-        'lindi',
-        'Mardi',
-        'Mercredi',
-        'Jeudi',
-        'Vendredi',
-        'Samedi',
-        'Dimanche',
-      ],
-      datasets: [
-        {
-          label: 'Heure',
-          backgroundColor: '#f87979',
-          data: [8, 7, 7, 3, 0, 0, 0]
-        }
-      ]
-    }
+  setup() {
+    const workingTimeStore = useWorkingTime()
+    const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
+
+    var dataWorkingTime: number[] = []
+    const dataWorkingTimes = computed(() => {
+      dataWorkingTime = []
+      const sortedArray = allWorkingTime.value.sort((a, b) => moment(a.start).diff(b.start))
+      for(const workingTime of sortedArray) {
+        dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hour'))
+      }
+      return dataWorkingTime
+    })
+
+    const chartData = computed(() => {
+      return {
+        labels: [
+          'Lundi',
+          'Mardi',
+          'Mercredi',
+          'Jeudi',
+          'Vendredi',
+        ],
+        datasets: [
+          {
+            label: 'Heure',
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16', '#f87979'],
+            data: dataWorkingTimes.value
+          }
+        ]
+      }
+    })
 
     const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false
+      responsive: true
     }
 
-    return () =>
-      h(Bar, {
-        chartData,
-        chartOptions,
-        chartId: props.chartId,
-        width: props.width,
-        height: props.height,
-        cssClasses: props.cssClasses,
-        styles: props.styles,
-        plugins: props.plugins
-      })
+    return {
+      chartData,
+      chartOptions,
+    }
   }
 })
 </script>

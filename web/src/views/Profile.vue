@@ -6,10 +6,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, onMounted} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
-import {defineComponent} from "vue";
 
 export default defineComponent({
   name: 'ClocksVue',
@@ -18,11 +18,26 @@ export default defineComponent({
     userId: Number
   }
 })
+import { getAllUsers } from '@/helpers/user-helper';
+import { useUserStore } from '@/store/user';
+export default defineComponent({
+  name: 'Profile',
+    UserVue
+  components: {
+  },
+  setup() {
+    const userStore = useUserStore()
+    onMounted(() => {
+
+      getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+    })
+  }
+})
 </script>
 
 <style scoped lang="css">
-.profile-content {
-  display: flex;
-  gap: 5rem;
-}
+  .profile-content {
+    display: flex;
+    flex-direction: column;
+  }
 </style>
