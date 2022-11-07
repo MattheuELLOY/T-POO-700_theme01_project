@@ -1,17 +1,16 @@
-FROM node:lts-alpine as build
-RUN mkdir /app
-COPY . /app
+FROM node:latest
 
-WORKDIR /app
-COPY package.json ./
-COPY pnpm-lock.yaml ./
-RUN npm install -g pnpm
-RUN pnpm install
-COPY . .
-RUN pnpm build
+RUN apt-get update -y && apt-get install -y
 
-FROM nginx:stable-alpine as production
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY tools/nginx/default.conf /etc/nginx/conf.d/
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+RUN mkdir -p /usr/src/client
+WORKDIR /usr/src/client
+
+COPY . /usr/src/client
+RUN npm install
+RUN npm run build
+
+EXPOSE 3000
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=3000
+
+CMD ["npm", "run", "dev"]
