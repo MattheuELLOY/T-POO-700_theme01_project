@@ -1,11 +1,13 @@
 version: '3'
 
 services:
-  client:
-    build: ./web
-    container_name: client
+  web:
+    container_name: web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - "8080:80"
   phoenix:
     build: ./api
     environment:
@@ -13,11 +15,13 @@ services:
         PG_PWD: postgres
         PG_DB: api_dev
         PG_HOST: db
+    
     ports:
       - "4000:4000"
     depends_on:
       - db
   db:
+    container_name: postgres
     image: postgres:latest
     restart: always
     environment:

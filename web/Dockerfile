@@ -1,16 +1,21 @@
-FROM node:latest
+FROM node:lts-alpine
 
-RUN apt-get update -y && apt-get install -y
+# install simple http server for serving static content
+RUN npm install -g http-server
 
-RUN mkdir -p /usr/src/client
-WORKDIR /usr/src/client
+# make the 'app' folder the current working directory
+WORKDIR /app
 
-COPY . /usr/src/client
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
+
+# install project dependencies
 RUN npm install
-RUN npm run build
 
-EXPOSE 3000
-ENV NUXT_HOST=0.0.0.0
-ENV NUXT_PORT=3000
+# copy project files and folders to the current working directory (i.e. 'app' folder)
+COPY . .
 
-CMD ["npm", "run", "dev"]
+# build app for production with minification
+
+EXPOSE 8080
+CMD [ "http-server", "dist" ]
