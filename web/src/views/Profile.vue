@@ -10,20 +10,14 @@
 import { defineComponent, onMounted} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
+import { getAllUsers } from '@/helpers/user-helper';
+import { useUserStore } from '@/store/user';
 
 export default defineComponent({
-  name: 'ClocksVue',
+  name: 'Profile',
   components: {ClockManager, UserVue},
   props: {
     userId: Number
-  }
-})
-import { getAllUsers } from '@/helpers/user-helper';
-import { useUserStore } from '@/store/user';
-export default defineComponent({
-  name: 'Profile',
-    UserVue
-  components: {
   },
   setup() {
     const userStore = useUserStore()
@@ -33,11 +27,12 @@ export default defineComponent({
     })
   }
 })
+
+
 </script>
 
 <style scoped lang="css">
   .profile-content {
     display: flex;
-    flex-direction: column;
   }
 </style>
