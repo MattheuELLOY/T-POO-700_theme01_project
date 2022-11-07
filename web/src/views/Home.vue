@@ -1,5 +1,5 @@
 <template>
-  <div class="content card chart-gap">
+  <div v-if="user.id" class="content card chart-gap">
     <div class="white-text">
       <h2>Working times of the week</h2>
       <barChartVue v-bind:width='375' v-bind:height='250' />
@@ -16,6 +16,7 @@ import barChartVue from '@/components/barChart.vue';
 import doughnutChartVue from '@/components/doughnutChart.vue';
 import { useUserStore } from '@/store/user';
 import { useWorkingTime } from '@/store/workingTime';
+import { computed } from '@vue/reactivity';
 import { defineComponent, onMounted } from 'vue';
 
 export default defineComponent({
@@ -29,12 +30,17 @@ export default defineComponent({
   },
   setup(props) {
     const userStore = useUserStore()
+    const user = computed(() => userStore.user)
     const workingTimeStore = useWorkingTime()
 
     onMounted(() => {
       userStore.get(<number>props.userId)
       workingTimeStore.getAll(<number>props.userId)
     })
+
+    return {
+      user
+    }
   }
 })
 </script>
