@@ -9,8 +9,6 @@ import WorkingTimesVue from '@/components/WorkingTimes.vue'
 import ClockVue from '@/views/Clocks.vue'
 import ParametersVue from '@/views/Parameters.vue'
 
-import { useUserStore } from '@/store/user'
-import { computed } from 'vue'
 import { getUserToken } from '@/helpers/user-helper'
 
 const routes = [
@@ -85,7 +83,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
 	if (to.name !== 'login' && to.name !== 'sign-up' && localStorage.getItem('token') && localStorage.getItem('id')) {
 		const id: number = <number>Number(localStorage.getItem('id'))
-		getUserToken().then((response) => {
+		getUserToken().then((response: any) => {
 			if (response.data.data.id === id) {
 				next()
 			} else {

@@ -31,8 +31,8 @@ export default {
   },
   setup(props) {
     const data = reactive({
-      start: 0 as number,
-      end: 0 as number
+      start: '' as string,
+      end: '' as string
     });
 
     const userStore = useUserStore()
@@ -43,7 +43,7 @@ export default {
     })
 
     // Mes méthoes
-    function manageWorkingTime(start: Date, end: Date) {
+    function manageWorkingTime(start: string, end: string) {
       const startStr = moment(start).format('YYYY-MM-DD HH:mm:ss')
       const endtStr = moment(end).format('YYYY-MM-DD HH:mm:ss')
 
@@ -53,8 +53,8 @@ export default {
         } else {
           postWorkingTime(user.value.id, startStr, endtStr)
         }
-        data.start = 0
-        data.end = 0
+        data.start = ''
+        data.end = ''
       }
     }
 

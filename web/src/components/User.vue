@@ -62,7 +62,7 @@ export default {
         }
       }
       if (props.status === 'create') {
-        getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+        getAllUsers().then((response: any) => userStore.get(response.data.data[0].id))
       }
     })
 
@@ -79,7 +79,7 @@ export default {
     };
     function creatUser(): void {
       if (data.email && data.username && data.password) {
-        postUser(data.email, data.username, data.password).then((response) => {
+        postUser(data.email, data.username, data.password).then((response: any) => {
           userStore.getAll(),
           (response.data.success === false) ? data.errors = response.data.errors : (data.errors.length = 0, router.push('/login'))
         })
@@ -91,7 +91,7 @@ export default {
     };
     function connect(): void {
       if (data.email && data.password) {
-        loginUser(data.email, data.password).then((response) => {
+        loginUser(data.email, data.password).then((response: any) => {
           (response.data.success === false)
           ? (data.errors.push(response.data.error))
           : (

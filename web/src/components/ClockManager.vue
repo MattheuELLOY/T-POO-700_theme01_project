@@ -32,7 +32,7 @@
 </template>
 
 
-<script>
+<script lang="ts">
 
 import {useClockStore} from "@/store/clock";
 import {useUserStore} from "@/store/user";
@@ -51,12 +51,11 @@ export default {
   setup (props) {
     const clockStore = useClockStore();
     const userStore = useUserStore();
-    const workingTimeStore = useWorkingTime();
 
 
     onMounted(() => {
-      clockStore.getClockByUserId(props.userId)
-      userStore.get(props.userId)
+      clockStore.getClockByUserId(<number>props.userId)
+      userStore.get(<number>props.userId)
     });
 
     const clocks = computed(() => clockStore.clock)

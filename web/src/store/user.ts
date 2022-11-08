@@ -11,15 +11,15 @@ export const useUserStore = defineStore('user', {
 	},
 	actions: {
 		getAll(): void {
-			getAllUsers().then((response) => this.allUser = <User[]>response.data.data)
+			getAllUsers().then((response: any) => this.allUser = response.data.data)
 		},
 		get(id: number): void {
 			if (id) {
-				getUser(id).then((response) => this.user = response.data.data)
+				getUser(id).then((response: any) => this.user = response.data.data)
 			}
 		},
 		getByToken(): Promise<User> {
-			return getUserToken().then((response) => this.user = response.data.data)
+			return getUserToken().then((response: any) => this.user = response.data.data)
 		},
 		delete(): void {
 			this.user.id = -1

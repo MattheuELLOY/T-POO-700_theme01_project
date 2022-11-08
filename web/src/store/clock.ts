@@ -9,7 +9,7 @@ export const useClockStore = defineStore('clock', {
 	}),
 	actions: {
 		getClockByUserId(userId: number): void {
-			getClockByUserId(userId).then((response) => this.clock = response.data.data)
+			getClockByUserId(userId).then((response: any) => this.clock = response.data.data)
 		}
 	}
 })
