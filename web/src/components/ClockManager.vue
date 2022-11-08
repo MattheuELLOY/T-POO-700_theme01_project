@@ -6,7 +6,7 @@
           <img src="/src/assets/userLogo.png">
         </div>
         <div>
-          {{user.email}}
+          {{user.role}}
         </div>
         <div>Hello, {{user.username}}.</div>
 
@@ -15,11 +15,11 @@
         <div>
           <a :href=" 'http://localhost:5173/workingTimes/'+user.id ">My WorkingTimes</a>
           <div >
-            <label v-if="clocks.status==true" >
+            <label v-if="clocks.status == true" >
               <input @click="onClick" type="checkbox" value="{{clocks.status}}" id="yellow-toggle" checked>
               <span>Active</span>
             </label>
-            <label v-if="clocks.status!=true" for="yellow-toggle">
+            <label v-if="clocks.status != true" for="yellow-toggle">
               <input @click="onClick" type="checkbox" value="{{clocks.status}}" id="yellow-toggle" >
               <span>Inactive</span>
             </label>
@@ -46,12 +46,12 @@ export default {
     status: Boolean,
     userId: Number,
     username: String,
-    email: String
+    email: String,
+    role: String
   },
   setup (props) {
     const clockStore = useClockStore();
     const userStore = useUserStore();
-    const workingTimeStore = useWorkingTime();
 
 
     onMounted(() => {
@@ -68,8 +68,6 @@ export default {
       function createClock() {
           createClockByUserId(user.value.id).then(() => clockStore.getClockByUserId(user.value.id))
       };
-
-      // const startTime = clocks.value.time.split('T')[1];
 
       return {
         clocks,

@@ -191,6 +191,7 @@ li {
   font-size: 1.2rem;
   animation: clignote 3s linear infinite;
 }
+
 @keyframes clignote {
   10% { opacity:0.1; }
   12% { opacity:1; }

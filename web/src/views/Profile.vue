@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted} from 'vue'
+import {computed, defineComponent, onMounted} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
 import { getAllUsers } from '@/helpers/user-helper';
@@ -25,7 +25,12 @@ export default defineComponent({
 
       getAllUsers().then((response) => userStore.get(response.data.data[0].id))
     })
-  }
+    const user = computed(() => userStore.user)
+    return {
+      user
+    }
+  },
+
 })
 
 

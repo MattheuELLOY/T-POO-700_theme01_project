@@ -35,25 +35,36 @@ export default defineComponent({
     const workingTimeStore = useWorkingTime()
     const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
-    var dataWorkingTime: number[] = []
     const dataWorkingTimes = computed(() => {
-      dataWorkingTime = []
+      const dataWorkingTime = []
       const sortedArray = allWorkingTime.value.sort((a, b) => moment(a.start).diff(b.start))
       for(const workingTime of sortedArray) {
         dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hour'))
       }
-      return dataWorkingTime
+      return dataWorkingTime.slice(-7)
     })
+
+    const labelArray = computed(() => {
+      const res = []
+      for(const startDate of allWorkingTime.value){
+        res.push(startDate.start.toString().split('T')[0])
+      }
+      return res.slice(-7)
+    })
+
+
 
     const chartData = computed(() => {
       return {
-        labels: [
-          'Lundi',
-          'Mardi',
-          'Mercredi',
-          'Jeudi',
-          'Vendredi',
-        ],
+        // labels: [
+        //   'Lundi',
+        //   'Mardi',
+        //   'Mercredi',
+        //   'Jeudi',
+        //   'Vendredi',
+        // ],
+        labels : labelArray.value,
+
         datasets: [
           {
             label: 'Heure',

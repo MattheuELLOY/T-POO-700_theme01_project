@@ -41,7 +41,8 @@ export default {
     const data = reactive({
       email: '' as string,
       username: '' as string,
-      password: '' as string
+      password: '' as string,
+      role: '' as string,
     });
     const userStore = useUserStore();
     const user = computed(() => userStore.user)
