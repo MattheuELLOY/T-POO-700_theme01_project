@@ -4,8 +4,8 @@ import LoginVue from '@/views/Login.vue'
 import HomeVue from '@/views/Home.vue'
 import ProfileVue from '@/views/Profile.vue'
 import CreateUserVue from '@/views/CreateUser.vue'
-import WorkingTimeBoard from '@/views/WorkingTimeBoard.vue'
-import WorkingTimeManagement from '@/views/WorkingTimeManagement.vue'
+import WorkingTimeVue from '@/components/WorkingTime.vue'
+import WorkingTimesVue from '@/components/WorkingTimes.vue'
 import ClockVue from '@/views/Clocks.vue'
 
 const routes = [
@@ -40,23 +40,28 @@ const routes = [
 		component: ProfileVue
 	},
 	{
-		path: '/workingTime/:userid',
-		name: 'WorkingTime',
-		component: WorkingTimeManagement,
+		path: '/workingTime/:userId',
+		name: 'CreateWorkingTime',
+		component: WorkingTimeVue,
 		props: true
 	},
 	{
-		path: '/workingTimes/:userid',
-		name: 'WorkingTimes',
-		component: WorkingTimeBoard,
+		path: '/workingTime/:userId/:workingtimeId',
+		name: 'UpdateWorkingTime',
+		component: WorkingTimeVue,
 		props: true
-	}
-	,
+	},
+	{
+		path: '/workingTimes/:userId',
+		name: 'WorkingTimes',
+		component: WorkingTimesVue,
+		props: true
+	},
 	{
 		path: '/clocks/:userId',
 		name: 'Clocks',
 		component: ClockVue,
-		props: (route: any) => ({ userId: Number(route.params.userId) }),
+		props: true
 	}
 ]
 

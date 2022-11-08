@@ -1,15 +1,29 @@
-language: node_js
-node_js:
-  - "stable"
-cache:
-  directories:
-  - web
-script:
-  - npm run build
+language: elixir
+elixir:
+  - '1.0.5'
+otp_release: '17.4'
+jobs:
+  include:
+    - elixir: '1.2'
+      otp_release: '18.0'
+services:
+  - docker
+env:
+  - DOCKER_COMPOSE_VERSION=1.4.2
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose -f docker-compose.yml up --force-recreate
+  - cd api/
+  - ls -la
+  - mix deps.get
 deploy:
   provider: pages
-  skip_cleanup: true
+  cleanup: true
   github_token: $github_token
   local_dir: build
   on:
-    branch: antoine
+    branch: main

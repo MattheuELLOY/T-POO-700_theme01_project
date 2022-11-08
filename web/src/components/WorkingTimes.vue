@@ -1,14 +1,10 @@
 <template>
-  <div class="container">
-    <ul class="responsive-table">
-      <li class="table-header">
-          <th>
-            <div class="col col-1">start</div>
-            <div class="col col-2">end</div>
-            <div class="col col-3">id</div>
-            <div class="col col-4">userId</div>
-            <div class="col col-5">Delete</div>
-            <div class="col col-6">Update</div>
+  <div v-if="allWorkingTime[0]?.id">
+    <table>
+      <thead>
+        <tr>
+          <th v-for="value in columns">
+            <span>{{ value }}</span>
           </th>
       </li>
       <li class="table-row" v-for="item in allWorkingTime">
@@ -35,7 +31,7 @@ import { deletedWorkingTime } from '@/helpers/workingtime-helper';
 
 export default {
   props: {
-    userid: Number
+    userId: Number
   },
   setup(props) {
     const data = reactive({
@@ -48,13 +44,13 @@ export default {
     const workingTimeStore = useWorkingTime();
     const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
-    workingTimeStore.getAll(<number>props.userid);
+    workingTimeStore.getAll(<number>props.userId);
 
-    function deleteWorkingTime(idWorkingTime : any) {
-      deletedWorkingTime(idWorkingTime);
+    function deleteWorkingTime(idWorkingTime: number) {
+      deletedWorkingTime(idWorkingTime).then(() => workingTimeStore.getAll(<number>props.userId));
     }
-    function update(id : any) {
-      router.push({ name: 'workingtime', params: { status: 'edit' }})
+    function update(id: number) {
+      router.push({ name: 'UpdateWorkingTime', params: { userId: <number>props.userId, workingtimeId: id }})
     }
 
     function createWorkingTime(){
