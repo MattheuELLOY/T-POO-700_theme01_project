@@ -107,6 +107,14 @@ h1 {
 .white-text {
 	color: white;
 }
+.card-error {
+	margin-top: 1rem;
+	width: 100%;
+}
+.error {
+	color:red;
+	overflow-inline: none;
+}
 @media (max-width: 35em) {
   .content {
 		margin-inline: 1rem !important;
