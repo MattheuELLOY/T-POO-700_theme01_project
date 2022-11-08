@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="nav flex shadow">
-      <router-link class="nav-left" to="">
+      <router-link class="nav-left clignote" to="">
         <img class="logo" alt="logo" src="@/assets/bat.png"/>
         Gotham
       </router-link>
@@ -197,16 +197,6 @@ li {
   align-items: center;
   gap: 0.5em;
   font-size: 1.2rem;
-  animation: clignote 3s linear infinite;
-}
-@keyframes clignote {
-  10% { opacity:0.1; }
-  12% { opacity:1; }
-  14% { opacity:0.2; }
-  18% { opacity:1; }
-  20% { opacity:0.2; }
-  22% { opacity:1; }
-  100% { opacity:1; }
 }
 .nav-right {
   position: fixed;
@@ -262,9 +252,6 @@ li {
 }
 .icon-toggle:active {
   transform: translateY(1.5px);
-}
-.icon {
-  width: 1.7rem;
 }
 
 .drop-down {

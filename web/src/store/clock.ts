@@ -8,8 +8,8 @@ export const useClockStore = defineStore('clock', {
 			clock: {} as Clock
 	}),
 	actions: {
-		getClockByUserId(userId: number): void {
-			getClockByUserId(userId).then((response: any) => this.clock = response.data.data)
+		getClockByUserId(userId: number): Promise<void> {
+			return getClockByUserId(userId).then((response: any) => this.clock = response.data.data)
 		}
 	}
 })

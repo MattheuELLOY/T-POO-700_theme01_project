@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-content">
+  <div class="profile-content column">
     <ClockManager :user-id="userId" />
     <UserVue title="Change" status="update"/>
     <UserVue title="Delete" status="delete"/>
@@ -31,6 +31,7 @@ export default defineComponent({
 
 <style scoped lang="css">
   .profile-content {
+    top: 6rem;
     display: flex;
   }
 </style>

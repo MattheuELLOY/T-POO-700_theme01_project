@@ -1,7 +1,7 @@
 <template>
   <div class="content card column">
     <div>
-      <h2 class="white-text">Working time for:</h2>
+      <h2 class="white-text">Working Time For :</h2>
       <h3 class="white-text" style="text-align: center">{{ user.username }}</h3>
     </div>
     <div>

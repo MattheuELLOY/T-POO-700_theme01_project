@@ -17,10 +17,8 @@
       {{ title }}
     </button>
   </div>
-  <div v-else class="content card column">
-    <h2 class="white-text">{{ title }}</h2>
-    <h3 class="white-text">{{ user.username }}</h3>
-    <button class="btn" @click="onClick">
+  <div v-else class="delete-content margin-top">
+    <button class="btn-red" @click="onClick">
       {{ title }}
     </button>
   </div>
@@ -127,4 +125,12 @@ export default {
 </script>
 
 <style scoped lang="css">
+.delete-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.margin-top {
+  margin-block: 2rem;
+}
 </style>
