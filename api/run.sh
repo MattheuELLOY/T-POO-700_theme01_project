@@ -1,11 +1,6 @@
 #!/bin/bash
-
-mix deps.clean --all
-
-mix deps.get
-
 mix ecto.create
-
 mix ecto.migrate
-
-mix phx.server
+# mix run priv/repo/init_db_seeds.exs
+echo "Database $PG_DB created"
+exec mix phx.server
