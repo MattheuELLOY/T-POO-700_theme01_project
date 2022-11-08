@@ -1,12 +1,26 @@
 defmodule Api.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Api.AuthTokens.AuthToken
+  alias Api.Workingtimes.Workingtime
+  alias Api.Clocks.Clock
+  alias Api.Parameters.Parameter
+  alias Api.Teams.Team
 
+    @derive {Jason.Encoder, except: [:__meta__, :auth_tokens, :password]}
   schema "users" do
     field :email, :string
     field :username, :string
     field :password, :string
     field :role, :string, default: "user"
+    field :parameter, :id
+    field :team_id, :id
+
+    has_many :auth_tokens, AuthToken
+#    has_many :workingtimes, Workingtime
+#    has_many :clocks, Clock
+#    has_many :paramaters, Parameter
+#    has_many :teams, Team
 
     timestamps()
   end
@@ -14,7 +28,7 @@ defmodule Api.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :role, :password])
+    |> cast(attrs, [:username, :email, :role, :password, :parameter, :team_id])
     |> validate_required([:username, :email, :role, :password])
     |> validate_length(:username, min: 2, max: 20)
     |> validate_length(:password, min: 6, max: 30)

@@ -1,93 +1,102 @@
 <template>
-  <div class="container w-full">
-    <div style='background-color:rgb(255, 255, 255)'>
-      <div class=" p-10" style="cursor: auto;">
-        <div class="w-28 mx-auto relative -mt-24">
-          <img class="-mt-1" src="/src/assets/userLogo.png">
-        </div>
-        <div class="text-center">
-          {{user.email}}
-        </div>
-        <div class="mb-10 mt-5">Hello, {{user.username}}.</div>
-
-        <div class="mb-10 mt-10">Time: {{clocks.time}}</div>
-
-        <div class="flex items-center justify-between">
-          <a class="text-xs text-gray-400 mr-1 hover:text-gray-800" :href=" 'http://localhost:5173/workingTimes/'+user.id ">My WorkingTimes</a>
-          <div class="w-1/2">
-            <label v-if="clocks.status==true" for="yellow-toggle" class="inline-flex relative items-center mr-5 cursor-pointer">
-              <input @click="onClick" type="checkbox" value="{{clocks.status}}" id="yellow-toggle" class="sr-only peer" checked>
-              <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-400"></div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Active</span>
-            </label>
-            <label v-if="clocks.status!=true" for="yellow-toggle" class="inline-flex relative items-center mr-5 cursor-pointer">
-              <input @click="onClick" type="checkbox" value="{{clocks.status}}" id="yellow-toggle" class="sr-only peer" >
-              <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-400"></div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Inactive</span>
-            </label>
-          </div>
-        </div>
-      </div>
+  <div class="content card column gap-profile">
+    <img class="img" src="/src/assets/bat.png">
+    <div style="padding-top: 0.5rem;">
+      <h2 class="white-text">Clock Manager For :</h2>
+      <h3 class="white-text" style="text-align: center">{{ user.username }}</h3>
     </div>
+    <div class="time">
+      <img class="icon" src="@/assets/clock.png">
+      <div class="border-middle" ></div>
+      <h4 v-if="clocks.time" class="white-text">
+        {{ moment(clocks.time).format("HH:mm:ss dddd Do MMMM YYYY") }}
+      </h4>
+    </div>
+    <label>
+      <input @click="onClick" type="checkbox" v-model="clocks.status">
+      <span class="white-text">{{ textCheckbox }}</span>
+    </label>
   </div>
 
 </template>
 
 
-<script>
+<script lang="ts">
 
+import moment from "moment";
 import {useClockStore} from "@/store/clock";
 import {useUserStore} from "@/store/user";
-import {useWorkingTime} from "@/store/workingTime";
-import {computed, onMounted} from "vue";
+import {computed, onMounted, reactive, toRefs} from "vue";
 import {createClockByUserId} from "@/helpers/clock-helpers";
 
 export default {
   props: {
-    time: String,
-    status: Boolean,
     userId: Number,
-    username: String,
-    email: String
   },
   setup (props) {
+    const data = reactive({
+      textCheckbox: '' as string
+    })
     const clockStore = useClockStore();
     const userStore = useUserStore();
-    const workingTimeStore = useWorkingTime();
-
-
-    onMounted(() => {
-      clockStore.getClockByUserId(props.userId)
-      userStore.get(props.userId)
-    });
 
     const clocks = computed(() => clockStore.clock)
     const user = computed(() => userStore.user)
 
-      function onClick() {
-        createClock()
-      };
-      function createClock() {
-          createClockByUserId(user.value.id).then(() => clockStore.getClockByUserId(user.value.id))
-      };
 
-      // const startTime = clocks.value.time.split('T')[1];
+    onMounted(() => {
+      var id: number = 0
+      userStore.getByToken().then(() => {
+        id = (props.userId) ? props.userId : user.value.id
+        clockStore.getClockByUserId(id).then(() => changeTextCheckBox())
+      })
+    });
 
-      return {
-        clocks,
-        user,
-        onClick
-      };
+    function onClick() {
+      createClockByUserId(user.value.id).then(() => clockStore.getClockByUserId(user.value.id)).then(() => changeTextCheckBox())
+    };
+    function changeTextCheckBox(): void {
+      data.textCheckbox = (clocks.value.status === false) ? 'Inactive' : 'Active'
     }
+
+    // const startTime = clocks.value.time.split('T')[1];
+
+    return {
+      moment,
+      ...toRefs(data),
+      clocks,
+      user,
+      onClick
+    };
+  }
 }
 </script>
 
 <style>
-.container {
-  flex-direction: column;
-
-  border: 0px solid;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+.img {
+  position: absolute;
+	top: 0;
+	margin-top: -2.5rem;
+  width: 8.5rem;
+}
+.gap-profile {
+  gap: 1rem !important;
+}
+.time {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  max-width: 12rem;
+  text-align: center;
+  overflow-wrap: break-word;
+  border: 1px solid;
+  border-radius: 4px;
+  border-color: var(--color-shadow-yellow-bat);
+}
+.border-middle {
+  min-height: 3rem;
+  border-left: 1px solid;
+  border-color: var(--color-shadow-yellow-bat);
 }
 </style>

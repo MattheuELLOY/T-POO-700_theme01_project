@@ -1,4 +1,3 @@
-
 export interface Workingtime {
     start: Date;
     end: Date;
