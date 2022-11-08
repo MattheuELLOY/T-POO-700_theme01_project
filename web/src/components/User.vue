@@ -5,14 +5,14 @@
       <input placeholder= "email" v-model="email" class="input"/>
       <span class="label">Email :</span>
     </div>
-    <div>
+    <div v-if="status !== 'login'">
       <input placeholder="username" v-model="username" class="input"/>
       <span class="label">Username :</span>
     </div>
-    <!-- <div>
-      <input placeholder="password" v-model="username" class="user-input"/>
-      <span class="label">password :</span>
-    </div> -->
+    <div>
+      <input placeholder="password" v-model="password" class="input" type="password"/>
+      <span class="label">Password :</span>
+    </div>
     <button class="btn" @click="onClick">
       {{ title }}
     </button>
@@ -24,12 +24,18 @@
       {{ title }}
     </button>
   </div>
+  <div v-if="errors[0]" class="card card-error">
+    <h3 class="white-text">Errors :</h3>
+    <ul v-for="error of errors">
+      <li class="error">{{ error }}</li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">
 import { useUserStore } from '@/store/user'
 import { computed, onMounted, reactive, toRefs } from 'vue'
-import { postUser, putUser, deletedUser, getAllUsers } from '@/helpers/user-helper'
+import { postUser, putUser, deletedUser, getAllUsers, loginUser } from '@/helpers/user-helper'
 import router from '@/router'
 
 export default {
@@ -41,12 +47,20 @@ export default {
     const data = reactive({
       email: '' as string,
       username: '' as string,
-      password: '' as string
+      password: '' as string,
+      errors: [] as string[]
     });
-    const userStore = useUserStore();
+    const userStore = useUserStore()
     const user = computed(() => userStore.user)
 
     onMounted(() => {
+      if ((props.status === 'login' || props.status === 'signUp')) {
+        if (localStorage.getItem('token') || localStorage.getItem('id')) {
+          localStorage.clear()
+        } if (user.value?.id) {
+          userStore.$reset()
+        }
+      }
       if (props.status === 'create') {
         getAllUsers().then((response) => userStore.get(response.data.data[0].id))
       }
@@ -60,22 +74,37 @@ export default {
       } else if (props.status === 'delete'){
 				deleteUser()
 			} else {
-        getAllUsers().then((response) => { 
-          userStore.get(response.data.data[0].id),
-          router.push({name: 'chartManager', params: { userId: response.data.data[0].id }})
-        })
+        connect()
       }
     };
     function creatUser(): void {
-      if (data.email && data.username) {
-        postUser(data.email, data.username).then(() => userStore.getAll())
+      if (data.email && data.username && data.password) {
+        postUser(data.email, data.username, data.password).then((response) => {
+          userStore.getAll(),
+          (response.data.success === false) ? data.errors = response.data.errors : (data.errors.length = 0, router.push('/login'))
+        })
 
         data.email = ""
         data.username = ""
-
-        router.push('chartManager')
+        data.password = ""
       }
     };
+    function connect(): void {
+      if (data.email && data.password) {
+        loginUser(data.email, data.password).then((response) => {
+          (response.data.success === false)
+          ? (data.errors.push(response.data.error))
+          : (
+            localStorage.setItem('token', JSON.stringify(response.data.token)),
+            userStore.getByToken().then(() => { 
+              localStorage.setItem('id', user.value.id.toString()),
+              router.push({name: 'chartManager', params: { userId: user.value.id }}) })
+          )
+        })
+        data.email = ""
+        data.password = ""
+      }
+    }
     function updateUser(): void {
       if (data.email && data.username) {
         putUser(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
