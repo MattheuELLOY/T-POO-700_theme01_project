@@ -1,11 +1,3 @@
-language: elixir
-elixir:
-  - '1.0.5'
-otp_release: '17.4'
-jobs:
-  include:
-    - elixir: '1.2'
-      otp_release: '18.0'
 services:
   - docker
 env:
@@ -16,9 +8,7 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  - cd api/
-  - ls -la
-  - mix deps.get
+  - docker-compose -f docker-compose.yml up --build
 deploy:
   provider: pages
   cleanup: true
