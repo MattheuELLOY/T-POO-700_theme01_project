@@ -10,7 +10,6 @@
 import { defineComponent, onMounted} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
-import { getAllUsers } from '@/helpers/user-helper';
 import { useUserStore } from '@/store/user';
 
 export default defineComponent({
@@ -22,8 +21,7 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore()
     onMounted(() => {
-
-      getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+      userStore.getByToken()
     })
   }
 })

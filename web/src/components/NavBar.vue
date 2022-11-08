@@ -102,6 +102,7 @@ export default {
 
     function logout() {
       userStore.$reset()
+      localStorage.clear()
       router.push('/sign-up')
     }
 
