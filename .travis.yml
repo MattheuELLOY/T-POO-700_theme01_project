@@ -1,7 +1,8 @@
-language: docker
-docker:
+language: elixir
+elixir:
   - "stable"
-
+services:
+  - docker
 deploy:
   provider: pages
   cleanup: true
