@@ -40,7 +40,7 @@ export default defineComponent({
 
     const workingTime = computed(() => { 
       var sumWokingTime: number = 0
-      for (const workingTime of allWorkingTime.value) {
+      for (const workingTime of allWorkingTime.value.slice(-7)) {
         sumWokingTime += moment(workingTime.end).diff(moment(workingTime.start), 'hour')
       }
       return sumWokingTime
