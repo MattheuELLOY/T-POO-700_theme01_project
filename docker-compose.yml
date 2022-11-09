@@ -1,34 +1,33 @@
-services:
-  web:
-    container_name: web
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-  phoenix:
-    build: ./api
-    environment:
-        PG_USER: postgres
-        PG_PWD: postgres
-        PG_DB: api_dev
-        PG_HOST: db
-    
-    ports:
-      - "4000:4000"
-    depends_on:
-      - db
-  db:
-    container_name: postgres
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes: 
-      - db:/var/lib/postgresql/data
-    ports:
-        - "5432:5432"
+web:
+  container_name: web
+  build:
+    context: ./web
+    dockerfile: Dockerfile
+  ports:
+    - "8080:80"
 
+phoenix:
+  build: ./api
+  environment:
+      PG_USER: postgres
+      PG_PWD: postgres
+      PG_DB: api_dev
+      PG_HOST: db
+  ports:
+    - "4000:4000"
+  depends_on:
+    - db
+
+db:
+  container_name: postgres
+  image: postgres:latest
+  restart: always
+  environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+  volumes: 
+    - db:/var/lib/postgresql/data
+  ports:
+      - "5432:5432"
 volumes:
   db:
