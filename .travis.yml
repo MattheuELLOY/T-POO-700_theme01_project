@@ -11,6 +11,7 @@ deploy:
   cleanup: true
   github_token: $github_token
   local_dir: .
+  target_branch: main
   on:
     branch: TravisCI
 script:
