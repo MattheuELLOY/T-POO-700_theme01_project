@@ -9,7 +9,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
-  - docker-compose -f docker-compose.yml up
+  - docker-compose up .
 deploy:
   provider: pages
   cleanup: true
