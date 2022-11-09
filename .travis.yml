@@ -2,7 +2,6 @@ language: ruby
 services:
   - docker
 before_install:
-  - gem install bundler
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-linux-x86_64 > docker-compose
   - chmod +x docker-compose
@@ -17,4 +16,5 @@ deploy:
   on:
     branch: TravisCI
 script:
+  - gem install bundler
   - bundle exec rake test
