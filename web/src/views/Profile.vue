@@ -1,8 +1,8 @@
 <template>
   <div class="profile-content column">
     <ClockManager :user-id="userId" />
-    <UserVue title="Change" status="update"/>
-    <UserVue title="Delete" status="delete"/>
+    <UserVue v-if="user.role == 'admin'" title="Change" status="update"/>
+    <UserVue v-if="user.role == 'admin'" title="Delete" status="delete"/>
   </div>
 </template>
 

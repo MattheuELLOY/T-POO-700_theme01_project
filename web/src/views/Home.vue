@@ -1,11 +1,11 @@
 <template>
   <div v-if="user.id" class="content card chart-gap">
     <div class="white-text">
-      <h2>Working times of last 7 days</h2>
+      <h2>Working hours per day</h2>
       <barChartVue v-bind:width='375' v-bind:height='250' />
     </div>
     <div class="white-text">
-      <h2>Hours worked of the week</h2>
+      <h2>Hours worked in last 7 days</h2>
       <doughnutChartVue v-bind:width='375' v-bind:height='250' />
     </div>
   </div>
@@ -59,4 +59,7 @@ export default defineComponent({
     flex-direction: column;
   }
 }
+  .white-text{
+    text-align: center;
+  }
 </style>
