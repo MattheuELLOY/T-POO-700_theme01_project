@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav class="nav flex shadow">
-      <router-link class="nav-left" to="">
+      <router-link class="nav-left clignote" to="">
         <img class="logo" alt="logo" src="@/assets/bat.png"/>
         Gotham
       </router-link>
@@ -13,12 +13,12 @@
         <ul class="nav-top gap flex">
           <li style="color: #fdff00">User :</li>
           <li>
-            <select class="drop-down" @click="selecteUser($event.target.value)">
+            <select class="drop-down" @click="selecteUser($event)">
               <option v-for="user in allUser" :value="user.id" :key="user.id">{{ user.username }}</option>
             </select>
           </li>
           <li>
-            <select class="drop-down" @click="selecteCreate($event.target.value)">
+            <select class="drop-down" @click="selecteCreate($event)">
               <option value="/create-user">Create User</option>
               <option value="/workingTime">Create Working Time</option>
             </select>
@@ -29,12 +29,12 @@
           <div class="nav-top-on-right">
             <li>
               <p style="color: #fdff00">User :</p>
-              <select class="drop-down" @click="selecteUser($event.target.value)">
+              <select class="drop-down" @click="selecteUser($event)">
                 <option v-for="user in allUser" :value="user.id" :key="user.id">{{ user.username }}</option>
               </select>
             </li>
             <li>
-              <select class="drop-down" @click="selecteCreate($event.target.value)">
+              <select class="drop-down" @click="selecteCreate($event)">
                 <option value="/create-user">Create User</option>
                 <option value="/workingTime">Create Working Time</option>
               </select>
@@ -75,24 +75,31 @@ export default {
       userStore.getAll()
     })
 
-    function selecteUser(id: number) {
+    function selecteUser(event: MouseEvent) {
+      const click = event.target as HTMLTextAreaElement
+      const id: number = <number>Number(click.value)
       const actualRoute = route.path
 
-      userStore.get(id)
-      workingTimeStore.getAll(id)
+      if (id) {
+        userStore.get(id)
+        workingTimeStore.getAll(id)
 
-      if (route.params.userId && route.params.workingtimeId) {
-        router.replace({name: 'WorkingTimes', params: { userId: user.value.id }})
-      } else if (route.params.userId) {
-        router.push(actualRoute.slice(actualRoute.length, 1) + id)
+        if (route.params.userId && route.params.workingtimeId) {
+          router.replace({name: 'WorkingTimes', params: { userId: user.value.id }})
+        } else if (route.params.userId) {
+          router.push(actualRoute.slice(actualRoute.length, 1) + id)
+        }
       }
     }
 
-    function selecteCreate(value: string) {
-      if (value === '/workingTime') {
+    function selecteCreate(event: MouseEvent) {
+      const click = event.target as HTMLTextAreaElement
+      if (click.value) {
+        if (click.value === '/workingTime') {
         router.push({ name: 'CreateWorkingTime', params: { userId: user.value.id } })
-      } else {
-        router.push(value)
+        } else {
+         router.push(click.value)
+        }
       }
     }
 
@@ -102,6 +109,7 @@ export default {
 
     function logout() {
       userStore.$reset()
+      localStorage.clear()
       router.push('/sign-up')
     }
 
@@ -189,17 +197,6 @@ li {
   align-items: center;
   gap: 0.5em;
   font-size: 1.2rem;
-  animation: clignote 3s linear infinite;
-}
-
-@keyframes clignote {
-  10% { opacity:0.1; }
-  12% { opacity:1; }
-  14% { opacity:0.2; }
-  18% { opacity:1; }
-  20% { opacity:0.2; }
-  22% { opacity:1; }
-  100% { opacity:1; }
 }
 .nav-right {
   position: fixed;
@@ -255,9 +252,6 @@ li {
 }
 .icon-toggle:active {
   transform: translateY(1.5px);
-}
-.icon {
-  width: 1.7rem;
 }
 
 .drop-down {

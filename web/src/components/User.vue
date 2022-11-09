@@ -5,31 +5,35 @@
       <input placeholder= "email" v-model="email" class="input"/>
       <span class="label">Email :</span>
     </div>
-    <div>
+    <div v-if="status !== 'login'">
       <input placeholder="username" v-model="username" class="input"/>
       <span class="label">Username :</span>
     </div>
-    <!-- <div>
-      <input placeholder="password" v-model="username" class="user-input"/>
-      <span class="label">password :</span>
-    </div> -->
+    <div>
+      <input placeholder="password" v-model="password" class="input" type="password"/>
+      <span class="label">Password :</span>
+    </div>
     <button class="btn" @click="onClick">
       {{ title }}
     </button>
   </div>
-  <div v-else class="content card column">
-    <h2 class="white-text">{{ title }}</h2>
-    <h3 class="white-text">{{ user.username }}</h3>
-    <button class="btn" @click="onClick">
+  <div v-else class="delete-content margin-top">
+    <button class="btn-red" @click="onClick">
       {{ title }}
     </button>
+  </div>
+  <div v-if="errors[0]" class="card card-error">
+    <h3 class="white-text">Errors :</h3>
+    <ul v-for="error of errors">
+      <li class="error">{{ error }}</li>
+    </ul>
   </div>
 </template>
 
 <script lang="ts">
 import { useUserStore } from '@/store/user'
 import { computed, onMounted, reactive, toRefs } from 'vue'
-import { postUser, putUser, deletedUser, getAllUsers } from '@/helpers/user-helper'
+import { postUser, putUser, deletedUser, getAllUsers, loginUser } from '@/helpers/user-helper'
 import router from '@/router'
 
 export default {
@@ -42,14 +46,21 @@ export default {
       email: '' as string,
       username: '' as string,
       password: '' as string,
-      role: '' as string,
+      errors: [] as string[]
     });
-    const userStore = useUserStore();
+    const userStore = useUserStore()
     const user = computed(() => userStore.user)
 
     onMounted(() => {
+      if ((props.status === 'login' || props.status === 'signUp')) {
+        if (localStorage.getItem('token') || localStorage.getItem('id')) {
+          localStorage.clear()
+        } if (user.value?.id) {
+          userStore.$reset()
+        }
+      }
       if (props.status === 'create') {
-        getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+        getAllUsers().then((response: any) => userStore.get(response.data.data[0].id))
       }
     })
 
@@ -61,22 +72,37 @@ export default {
       } else if (props.status === 'delete'){
 				deleteUser()
 			} else {
-        getAllUsers().then((response) => { 
-          userStore.get(response.data.data[0].id),
-          router.push({name: 'chartManager', params: { userId: response.data.data[0].id }})
-        })
+        connect()
       }
     };
     function creatUser(): void {
-      if (data.email && data.username) {
-        postUser(data.email, data.username).then(() => userStore.getAll())
+      if (data.email && data.username && data.password) {
+        postUser(data.email, data.username, data.password).then((response: any) => {
+          userStore.getAll(),
+          (response.data.success === false) ? data.errors = response.data.errors : (data.errors.length = 0, router.push('/login'))
+        })
 
         data.email = ""
         data.username = ""
-
-        router.push('chartManager')
+        data.password = ""
       }
     };
+    function connect(): void {
+      if (data.email && data.password) {
+        loginUser(data.email, data.password).then((response: any) => {
+          (response.data.success === false)
+          ? (data.errors.push(response.data.error))
+          : (
+            localStorage.setItem('token', JSON.stringify(response.data.token)),
+            userStore.getByToken().then(() => { 
+              localStorage.setItem('id', user.value.id.toString()),
+              router.push({name: 'chartManager', params: { userId: user.value.id }}) })
+          )
+        })
+        data.email = ""
+        data.password = ""
+      }
+    }
     function updateUser(): void {
       if (data.email && data.username) {
         putUser(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
@@ -99,4 +125,12 @@ export default {
 </script>
 
 <style scoped lang="css">
+.delete-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.margin-top {
+  margin-block: 2rem;
+}
 </style>

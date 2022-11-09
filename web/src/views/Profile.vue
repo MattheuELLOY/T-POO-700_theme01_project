@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-content">
+  <div class="profile-content column">
     <ClockManager :user-id="userId" />
     <UserVue title="Change" status="update"/>
     <UserVue title="Delete" status="delete"/>
@@ -10,7 +10,6 @@
 import {computed, defineComponent, onMounted} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
-import { getAllUsers } from '@/helpers/user-helper';
 import { useUserStore } from '@/store/user';
 
 export default defineComponent({
@@ -22,8 +21,7 @@ export default defineComponent({
   setup() {
     const userStore = useUserStore()
     onMounted(() => {
-
-      getAllUsers().then((response) => userStore.get(response.data.data[0].id))
+      userStore.getByToken()
     })
     const user = computed(() => userStore.user)
     return {
@@ -38,6 +36,7 @@ export default defineComponent({
 
 <style scoped lang="css">
   .profile-content {
+    top: 6rem;
     display: flex;
   }
 </style>

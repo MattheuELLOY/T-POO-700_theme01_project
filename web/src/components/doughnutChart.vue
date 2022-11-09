@@ -1,5 +1,5 @@
 <template>
-  <Doughnut :chart-data="chartData" :chart-options="chartOptions" :chart-id="chartId" :width="width" :height="height"/>
+  <Doughnut :chart-options="chartOptions" :chart-data="chartData" :chart-id="chartId" :width="width" :height="height"/>
 </template>
 
 <script lang="ts">
@@ -55,7 +55,7 @@ export default defineComponent({
           {
             backgroundColor: ['#00D8FF', '#bcbcbc'],
             borderColor: 'transparent',
-            data: [workingTime, restWorkingTime]
+            data: [workingTime.value, restWorkingTime.value]
           }
         ]
       }

@@ -9,6 +9,8 @@ import WorkingTimesVue from '@/components/WorkingTimes.vue'
 import ClockVue from '@/views/Clocks.vue'
 import ParametersVue from '@/views/Parameters.vue'
 
+import { getUserToken } from '@/helpers/user-helper'
+
 const routes = [
 	{
 		path: '/',
@@ -76,6 +78,21 @@ const routes = [
 const router = createRouter({
 	history: createWebHistory(),
 	routes
+})
+
+router.beforeEach((to, from, next) => {
+	if (to.name !== 'login' && to.name !== 'sign-up' && localStorage.getItem('token') && localStorage.getItem('id')) {
+		const id: number = <number>Number(localStorage.getItem('id'))
+		getUserToken().then((response: any) => {
+			if (response.data.data.id === id) {
+				next()
+			} else {
+				next({ name: 'login' })
+			}
+		})
+	} else {
+		next()
+	}
 })
 
 export default router

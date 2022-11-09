@@ -4,13 +4,13 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
   import ClockManager from '@/components/ClockManager.vue'
-  import {defineComponent} from "vue";
+  import { defineComponent } from "vue";
 
 export default defineComponent({
   name: 'ClocksVue',
-  components: {ClockManager},
+  components: { ClockManager },
     props: {
       userId: Number
     }

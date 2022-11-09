@@ -28,6 +28,19 @@ h1 {
 	--color-shadow-yellow-bat: #988829;
 }
 
+.clignote {
+  animation: clignote 3s linear infinite;
+}
+@keyframes clignote {
+  10% { opacity:0.1; }
+  12% { opacity:1; }
+  14% { opacity:0.2; }
+  18% { opacity:1; }
+  20% { opacity:0.2; }
+  22% { opacity:1; }
+  100% { opacity:1; }
+}
+
 .content {
 	margin-inline: 1rem !important;
 	padding: 2rem;
@@ -94,9 +107,9 @@ h1 {
 	background-color: transparent;
 	border-radius: 4px;
 	outline: none;
+	cursor:pointer;
 	}
 .btn:hover {
-	cursor:pointer;
 	color: var(--color-yellow-bat);
 	border-color: var(--color-shadow-yellow-bat);
 }
@@ -104,14 +117,44 @@ h1 {
 	box-shadow: rgba(254, 254, 254, 0.2) 0px 2px 4px 0px inset;
 	transform: translateY(2px);
 }
+.btn-red {
+	padding: 10px;
+
+	color: white;
+
+	border: 2px solid;
+	border-color: red;
+	background-color: transparent;
+	border-radius: 4px;
+	outline: none;
+	cursor:pointer;
+}
+.btn-red:hover {
+	color: red;
+	border-color: darkred;
+}
+.btn-red:active {
+	box-shadow: rgba(254, 254, 254, 0.2) 0px 2px 4px 0px inset;
+	transform: translateY(2px);
+}
 .white-text {
 	color: white;
+}
+.card-error {
+	margin-top: 1rem;
+	width: 100%;
+}
+.error {
+	color:red;
+	overflow-inline: none;
+}
+.icon {
+  width: 1.7rem;
 }
 @media (max-width: 35em) {
   .content {
 		margin-inline: 1rem !important;
 		padding: 2rem;
 		padding-inline: 3rem;
-		gap: 2rem;
 	}
 }

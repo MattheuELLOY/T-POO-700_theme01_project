@@ -3,4 +3,6 @@ export interface User {
     id: number
     username: string;
     role: string;
+    parameter: number;
+    team_id: number;
 };

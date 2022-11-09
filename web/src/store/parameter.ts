@@ -11,10 +11,10 @@ export const useParameterStore = defineStore('parameter', {
 	},
 	actions: {
 		getAll(): void {
-			getAllParameters().then((response) => this.allParameter = <Parameter[]>response.data.data)
+			getAllParameters().then((response: any) => this.allParameter = response.data.data)
 		},
 		get(id: number): void {
-			getParameter(id).then((response) => this.parameter = response.data.data)
+			getParameter(id).then((response: any) => this.parameter = response.data.data)
 		}
 	}
 })

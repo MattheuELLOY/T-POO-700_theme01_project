@@ -15,8 +15,8 @@
             <span>{{ item.end }}</span>
             <span>{{ item.id }}</span>
             <span>{{ item.user }}</span>
-            <span><button v-on:click="deleteWorkingTime(item.id)">Delete</button></span>
-            <span><button v-on:click="update(item.id)">Update</button></span>
+            <span><button @click="deleteWorkingTime(<number>item.id)">Delete</button></span>
+            <span><button @click="update(<number>item.id)">Update</button></span>
           </td>
         </tr>
       </tbody>
