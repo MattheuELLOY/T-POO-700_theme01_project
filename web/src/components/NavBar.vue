@@ -204,7 +204,7 @@ li {
 }
 .nav-right {
   position: fixed;
-  inset: 3.25rem 0 0 70%;
+  inset: 3.25rem 0 0 81%;
 
   background-color: var(--color-dark-bat);
   backdrop-filter: blur(0.5rem);
@@ -213,7 +213,7 @@ li {
 
   padding: min(30vh, 10rem) 3rem;
   flex-direction: column;
-  width: 30%;
+  width: 25%;
 }
 .nav-right li {
   padding-top: 1rem;
@@ -238,12 +238,12 @@ li {
   vertical-align: middle;
 }
 .icon-toggle {
-  position: absolute;
+  position:fixed;
   display: block;
   z-index: 9999;
 
-  top: 0px;
-  right: 0px;
+  top: 10px;
+  right: 1.25rem;
   border: 1px solid;
   border-radius: 4px;
   border-color: var(--color-shadow-yellow-bat);
@@ -283,27 +283,34 @@ li {
   gap: 1.5rem;
 }
 
-@media (max-width: 60em) {
+@media (max-width: 78em) {
   .nav-right {
-    inset: 3.25rem 0 0 50%;
-    width: 50%;
+    inset: 3.25rem 0 0 65%;
+    width: 40%;
   }
 }
-@media (max-width: 42em) {
+@media (max-width: 45em) {
+  .nav-right {
+    inset: 3.25rem 0 0 55%;
+    width: 50%;
+  }
   .nav-top {
     display: none;
   }
   .nav-top-on-right {
     display: block;
   }
-  .icon-toggle{
-    position: relative;
+}
+@media (max-width: 37em) {
+  .nav-right {
+    inset: 3.25rem 0 0 40%;
+    width: 70%;
   }
 }
-@media (max-width: 35em) {
+@media (max-width: 27em) {
   .nav-right {
-    inset: 3.25rem 0 0 30%;
-    width: 70%;
+    inset: 3.25rem 0 0 25%;
+    width: 90%;
   }
 }
 </style>
