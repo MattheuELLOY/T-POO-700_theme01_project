@@ -1,12 +1,19 @@
 <template v-if="user.id">
   <div class="content card chart-gap">
     <div class="white-text">
-      <h2>Working times of the week</h2>
+      <h2>Activity</h2>
       <barChartVue v-bind:width='375' v-bind:height='250' />
     </div>
     <div class="white-text">
-      <h2>Hours of the week</h2>
+      <h2>Hours worked in last 7 days</h2>
       <doughnutChartVue v-bind:width='375' v-bind:height='250' />
+    </div>
+  </div>
+  &nbsp
+  <div v-if="user.id" class="content card chart-gap">
+    <div class="white-text">
+      <h2>Working hours per day</h2>
+      <LineChart v-bind:width='700' v-bind:height='250' />
     </div>
   </div>
 </template>
@@ -18,10 +25,12 @@ import { useUserStore } from '@/store/user';
 import { useWorkingTime } from '@/store/workingTime';
 import { computed } from '@vue/reactivity';
 import { defineComponent, onMounted } from 'vue';
+import LineChart from "@/components/LineChart.vue";
 
 export default defineComponent({
   name: 'Home',
   components: {
+    LineChart,
     barChartVue,
     doughnutChartVue
   },
@@ -58,4 +67,7 @@ export default defineComponent({
     flex-direction: column;
   }
 }
+  .white-text{
+    text-align: center;
+  }
 </style>

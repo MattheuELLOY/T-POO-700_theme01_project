@@ -40,22 +40,24 @@ export default defineComponent({
 
     const workingTime = computed(() => { 
       var sumWokingTime: number = 0
-      for (const workingTime of allWorkingTime.value) {
+      for (const workingTime of allWorkingTime.value.slice(-7)) {
         sumWokingTime += moment(workingTime.end).diff(moment(workingTime.start), 'hour')
       }
       return sumWokingTime
     })
     const restWorkingTime = computed(() => { return (35 - workingTime.value) })
 
+
+
     const chartId: string = 'doughnut-chart' 
     const chartData = computed(() => {
       return {
-        labels: ['Réaliser', 'Restant'],
+        labels: restWorkingTime.value < 0 ?['Realised','Additional'] : ['Realised', 'Remaining'],
         datasets: [
           {
-            backgroundColor: ['#00D8FF', '#bcbcbc'],
+            backgroundColor: ['#00D8FF', restWorkingTime.value < 0 ?'#f87979' :'#bcbcbc'],
             borderColor: 'transparent',
-            data: [workingTime.value, restWorkingTime.value]
+            data: [workingTime.value, restWorkingTime.value < 0 ?Math.abs(restWorkingTime.value) : restWorkingTime.value]
           }
         ]
       }
