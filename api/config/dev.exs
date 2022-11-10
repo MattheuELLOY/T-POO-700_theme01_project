@@ -4,7 +4,7 @@ import Config
 config :api, Api.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "postgres",
+  hostname: "localhost",
   database: "api_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
