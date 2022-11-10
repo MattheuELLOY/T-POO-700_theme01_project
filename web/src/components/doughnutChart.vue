@@ -52,7 +52,7 @@ export default defineComponent({
     const chartId: string = 'doughnut-chart' 
     const chartData = computed(() => {
       return {
-        labels: restWorkingTime.value < 0 ?['Realised','Additional'] : ['Réaliser', 'Restant'],
+        labels: restWorkingTime.value < 0 ?['Realised','Additional'] : ['Realised', 'Remaining'],
         datasets: [
           {
             backgroundColor: ['#00D8FF', restWorkingTime.value < 0 ?'#f87979' :'#bcbcbc'],

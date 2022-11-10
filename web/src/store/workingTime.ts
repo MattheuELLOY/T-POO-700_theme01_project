@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import type { Workingtime } from '@/models/workingtime'
-import { getWorkingTime } from '@/helpers/workingtime-helper'
+import {getAllWorkingTimes, getWorkingTime} from '@/helpers/workingtime-helper'
 
 export const useWorkingTime = defineStore('workingtime', {
 	state: () => ({
-		allWorkingTime: [] as Workingtime[]
+		allWorkingTime: [] as Workingtime[],
 	}),
 	actions: {
 		getAll(idUser: number): void {

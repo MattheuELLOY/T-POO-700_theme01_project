@@ -31,3 +31,7 @@ export function deletedWorkingTime(idWorkingTime: number): Promise<void> {
 export function getWorkingTime(idUser: number): Promise<Workingtime[]> {
   return HTTP.get("workingtimes/" + idUser)
 }
+
+export function getAllWorkingTimes(): Promise<Workingtime[]> {
+    return HTTP.get("workingtimes")
+}
