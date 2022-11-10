@@ -96,6 +96,7 @@ export default {
             localStorage.setItem('token', JSON.stringify(response.data.token)),
             userStore.getByToken().then(() => { 
               localStorage.setItem('id', user.value.id.toString()),
+              userStore.getAll()
               router.push({name: 'chartManager', params: { userId: user.value.id }}) })
           )
         })

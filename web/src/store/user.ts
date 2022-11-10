@@ -6,6 +6,7 @@ export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
 			user: {} as User,
+			selectedUser: {} as User,
 			allUser: [] as User[]
 		}
 	},
@@ -16,6 +17,11 @@ export const useUserStore = defineStore('user', {
 		get(id: number): void {
 			if (id) {
 				getUser(id).then((response: any) => this.user = response.data.data)
+			}
+		},
+		getSelected(id: number): void {
+			if (id) {
+				getUser(id).then((response: any) => this.selectedUser = response.data.data)
 			}
 		},
 		getByToken(): Promise<User> {

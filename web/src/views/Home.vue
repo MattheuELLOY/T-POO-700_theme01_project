@@ -1,5 +1,5 @@
-<template>
-  <div v-if="user.id" class="content card chart-gap">
+<template v-if="user.id">
+  <div class="content card chart-gap">
     <div class="white-text">
       <h2>Working times of the week</h2>
       <barChartVue v-bind:width='375' v-bind:height='250' />
@@ -34,7 +34,6 @@ export default defineComponent({
     const workingTimeStore = useWorkingTime()
 
     onMounted(() => {
-      userStore.get(<number>props.userId)
       workingTimeStore.getAll(<number>props.userId)
     })
 

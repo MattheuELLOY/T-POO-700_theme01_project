@@ -2,7 +2,7 @@
   <div class="profile-content column">
     <ClockManager :user-id="userId" />
     <UserVue title="Change" status="update"/>
-    <UserVue title="Delete" status="delete"/>
+    <UserVue v-if="user.role === 'admin'" title="Delete" status="delete"/>
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import { defineComponent, onMounted} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
 import { useUserStore } from '@/store/user';
+import { computed } from '@vue/reactivity';
 
 export default defineComponent({
   name: 'Profile',
@@ -20,9 +21,14 @@ export default defineComponent({
   },
   setup() {
     const userStore = useUserStore()
+    const user = computed(() => userStore.user)
     onMounted(() => {
       userStore.getByToken()
     })
+
+    return {
+      user
+    }
   }
 })
 

@@ -10,7 +10,7 @@
         <li><router-link to="/login">Login</router-link></li>
       </ul>
       <div v-else class="">
-        <ul class="nav-top gap flex">
+        <ul v-if="user.role === 'admin'" class="nav-top gap flex">
           <li style="color: #fdff00">User :</li>
           <li>
             <select class="drop-down" @click="selecteUser($event)">
@@ -61,6 +61,7 @@ export default {
   setup() {
     const userStore = useUserStore()
     const user = computed(() => userStore.user)
+    const userSelected = computed(() => userStore.selectedUser)
     const allUser = computed(() => userStore.allUser)
 
     const workingTimeStore = useWorkingTime()
@@ -73,6 +74,7 @@ export default {
 
     onMounted(() => {
       userStore.getAll()
+      userStore.getByToken()
     })
 
     function selecteUser(event: MouseEvent) {
@@ -81,11 +83,13 @@ export default {
       const actualRoute = route.path
 
       if (id) {
-        userStore.get(id)
-        workingTimeStore.getAll(id)
+        userStore.getSelected(id)
+        if(user.value.role === 'admin') {
+          workingTimeStore.getAll(id)
+        }
 
         if (route.params.userId && route.params.workingtimeId) {
-          router.replace({name: 'WorkingTimes', params: { userId: user.value.id }})
+          router.replace({name: 'WorkingTimes', params: { userId: userSelected.value.id }})
         } else if (route.params.userId) {
           router.push(actualRoute.slice(actualRoute.length, 1) + id)
         }
@@ -110,7 +114,7 @@ export default {
     function logout() {
       userStore.$reset()
       localStorage.clear()
-      router.push('/sign-up')
+      router.push('/login')
     }
 
     return {
