@@ -37,7 +37,6 @@ export default defineComponent({
 
 <style scoped lang="css">
   .profile-content {
-    top: 6rem;
     display: flex;
   }
 </style>
