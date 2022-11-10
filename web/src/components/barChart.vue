@@ -39,7 +39,7 @@ export default defineComponent({
       const dataWorkingTime = []
       const sortedArray = allWorkingTime.value.sort((a, b) => moment(a.start).diff(b.start))
       for(const workingTime of sortedArray) {
-        dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hours') - 7)
+        dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hours'))
 
       }
       return dataWorkingTime.slice(-7)
@@ -57,13 +57,6 @@ export default defineComponent({
 
     const chartData = computed(() => {
       return {
-        // labels: [
-        //   'Lundi',
-        //   'Mardi',
-        //   'Mercredi',
-        //   'Jeudi',
-        //   'Vendredi',
-        // ],
         labels : labelArray.value,
 
         datasets: [

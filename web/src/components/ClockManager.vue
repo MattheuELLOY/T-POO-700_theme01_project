@@ -59,8 +59,6 @@ export default {
       data.textCheckbox = (clocks.value.status === false) ? 'Inactive' : 'Active'
     }
 
-    // const startTime = clocks.value.time.split('T')[1];
-
     return {
       moment,
       ...toRefs(data),

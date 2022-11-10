@@ -15,7 +15,7 @@ import {
   CategoryScale,
 } from 'chart.js'
 import { useWorkingTime } from '@/store/workingTime'
-import moment, { relativeTimeRounding } from 'moment'
+import moment from 'moment'
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 
