@@ -1,39 +1,38 @@
-version: '3.6'
+version: '3'
+
 services:
-  adminer:
-    image: adminer
-    restart: always
+  web:
+    container_name: web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+  api:
+    build: ./api
     environment:
-        ADMINER_DESIGN: mvt
-        ADMINER_DEFAULT_SERVER: db
+        PG_USER: postgres
+        PG_PWD: postgres
+        PG_DB: api_dev
+        PG_HOST: db
+    
+    ports:
+      - "4000:4000"
     depends_on:
       - db
-    networks:
-      - db
-    ports:
-      - 8080:8080
-
-  portainer:
-    image: portainer/portainer-ce
-    volumes:
-        - ./portainer:/data
-        - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-        - 9000:9000
   db:
-    image: postgres
+    container_name: postgres
+    image: postgres:latest
+    restart: always
     environment:
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_DB: ${POSTGRES_DATABASE}
-        PGDATA: /data/postgres
-    volumes:
-      - db:/data/postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - db:/var/lib/postgresql/data
     ports:
-        - '5432:5432'
-    networks:
-        - db
+        - "5432:5432"
+
 volumes:
-  db:
-networks:
   db:

@@ -16,8 +16,8 @@
         <div class="col col-2" data-label="end">{{item.end}}</div>
         <div class="col col-3" data-label="id">{{item.id}}</div>
         <div class="col col-4" data-label="userId">{{item.user}}</div>
-        <button class="col col-5" style="background-color: #282e3c;" v-on:click="deleteWorkingTime(item.id)">Delete</button>
-        <button class="col col-6" style="background-color: #505c7c;" v-on:click="update(item.id)">Update</button>
+        <button class="col col-5" style="background-color: #282e3c;" @click="deleteWorkingTime(<number>item.id)">Delete</button>
+        <button class="col col-6" style="background-color: #505c7c;" @click="update(<number>item.id)">Update</button>
       </li>
     </ul>
   </div>
@@ -26,35 +26,26 @@
 </template>
   
 <script lang="ts">
-import { reactive } from 'vue'
-import type { Workingtime } from '@/models/workingtime'
 import { useWorkingTime } from '@/store/workingTime';
 import router from '@/router'
-import { computed, toRefs } from '@vue/reactivity';
+import { computed } from '@vue/reactivity';
 import { deletedWorkingTime } from '@/helpers/workingtime-helper';
 
 export default {
   props: {
-    userid: Number
+    userId: Number
   },
   setup(props) {
-    const data = reactive({
-      workinTime: {} as Workingtime,
-      userID: null,
-      start: '',
-      end: '',
-      listWorkingTime: {} as Array<Workingtime>
-    });
     const workingTimeStore = useWorkingTime();
     const allWorkingTime = computed(() => workingTimeStore.allWorkingTime)
 
-    workingTimeStore.getAll(<number>props.userid);
+    workingTimeStore.getAll(<number>props.userId);
 
-    function deleteWorkingTime(idWorkingTime : any) {
-      deletedWorkingTime(idWorkingTime);
+    function deleteWorkingTime(idWorkingTime: number) {
+      deletedWorkingTime(idWorkingTime).then(() => workingTimeStore.getAll(<number>props.userId));
     }
-    function update(id : any) {
-      router.push({ name: 'workingtime', params: { status: 'edit' }})
+    function update(id: number) {
+      router.push({ name: 'UpdateWorkingTime', params: { userId: <number>props.userId, workingtimeId: id }})
     }
 
     function createWorkingTime(){
@@ -63,7 +54,7 @@ export default {
 
     return {
       allWorkingTime,
-      ...toRefs(data),
+      columns: ["start", "end", "id", "userId", "Delete", "Update"],
       deleteWorkingTime,
       createWorkingTime,
       update,

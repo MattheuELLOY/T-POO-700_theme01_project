@@ -15,10 +15,23 @@ defmodule ApiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug ApiWeb.JWTAuthPlug
+    end
+
+#    PROTECTED
+  scope "/api/auth", ApiWeb do
+    pipe_through :auth
+    get "/", AuthController, :get
+    delete "/", AuthController, :delete
+#    PLACE FOR PROTECTED ROUTES
+    end
+
   scope "/", ApiWeb do
     pipe_through :browser
 
     get "/", PageController, :index
+
   end
 
   # Other scopes may use custom stacks.
@@ -26,6 +39,8 @@ defmodule ApiWeb.Router do
      pipe_through :api
 
      resources "/users", UserController, [:new, :edit]
+     resources "/teams", TeamController, [:new, :edit]
+     resources "/parameters", ParameterController, [:new, :edit]
 
      get "/workingtimes/", WorkingtimeController, :index
      get "/workingtimes/:userId", WorkingtimeController, :index
@@ -36,6 +51,10 @@ defmodule ApiWeb.Router do
 
      get "/clocks/:userId", ClockController, :show
      post "/clocks/:userId", ClockController, :create
+
+     post "/register", AuthController, :register
+     post "/register", AuthController, :register
+     post "/login", AuthController, :login
   end
 
   # Enables LiveDashboard only for development

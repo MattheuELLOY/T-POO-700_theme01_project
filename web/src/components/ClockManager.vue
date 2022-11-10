@@ -1,93 +1,100 @@
 <template>
-  <div class = "content card-clock">
-  <div>
-  Clocks Time: {{clocks.time}}
+  <div class="content card column gap-profile">
+    <img class="img" src="/src/assets/bat.png">
+    <div style="padding-top: 0.5rem;">
+      <h2 class="white-text">Clock Manager For :</h2>
+      <h3 class="white-text" style="text-align: center">{{ user.username }}</h3>
+    </div>
+    <div class="time">
+      <img class="icon" src="@/assets/clock.png">
+      <div class="border-middle" ></div>
+      <h4 v-if="clocks.time" class="white-text">
+        {{ moment(clocks.time).format("HH:mm:ss dddd Do MMMM YYYY") }}
+      </h4>
+    </div>
+    <label>
+      <input @click="onClick" type="checkbox" v-model="clocks.status">
+      <span class="white-text">{{ textCheckbox }}</span>
+    </label>
   </div>
-  <div>
-  Clocks Status: {{clocks.status}}
-  </div>
-  <div>
-    Username: {{users.username}}
-  </div>
-  <div>
-    Email: {{users.email}}
-  </div>
-  <button  class = "clock-btn" @click="onClick">
-    Create Clock
-  </button>
-  </div>
+
 </template>
 
-<script>
 
+<script lang="ts">
+
+import moment from "moment";
 import {useClockStore} from "@/store/clock";
 import {useUserStore} from "@/store/user";
-import {computed, onMounted} from "vue";
+import {computed, onMounted, reactive, toRefs} from "vue";
 import {createClockByUserId} from "@/helpers/clock-helpers";
 
 export default {
   props: {
-    time: String,
-    status: Boolean,
     userId: Number,
-    username: String,
-    email: String
   },
   setup (props) {
+    const data = reactive({
+      textCheckbox: '' as string
+    })
     const clockStore = useClockStore();
     const userStore = useUserStore();
-    onMounted(() => {
-      clockStore.getClockByUserId(props.userId)
-      userStore.get(props.userId)
-    });
+
     const clocks = computed(() => clockStore.clock)
-    const users = computed(() => userStore.user)
+    const user = computed(() => userStore.user)
 
-      function onClick() {
-        createClock()
-        console.log(props.userId)
-      };
-      function createClock() {
-        createClockByUserId(props.userId).then(() => clockStore.getClockByUserId(props.userId))
-      };
 
-      return {
-        clocks,
-        users,
-        onClick
-      };
+    onMounted(() => {
+      var id: number = 0
+      userStore.getByToken().then(() => {
+        id = (props.userId) ? props.userId : user.value.id
+        clockStore.getClockByUserId(id).then(() => changeTextCheckBox())
+      })
+    });
+
+    function onClick() {
+      createClockByUserId(user.value.id).then(() => clockStore.getClockByUserId(user.value.id)).then(() => changeTextCheckBox())
+    };
+    function changeTextCheckBox(): void {
+      data.textCheckbox = (clocks.value.status === false) ? 'Inactive' : 'Active'
     }
+
+    return {
+      moment,
+      ...toRefs(data),
+      clocks,
+      user,
+      onClick
+    };
+  }
 }
 </script>
-<style>
-.content {
-  min-width: 30rem;
-  min-height: 23rem;
 
-  margin: 0px;
+<style>
+.img {
+  position: absolute;
+	top: 0;
+	margin-top: -2.5rem;
+  width: 8.5rem;
+}
+.gap-profile {
+  gap: 1rem !important;
+}
+.time {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  gap: 5px;
+  padding: 5px;
+  max-width: 12rem;
+  text-align: center;
+  overflow-wrap: break-word;
+  border: 1px solid;
+  border-radius: 4px;
+  border-color: var(--color-shadow-yellow-bat);
 }
-.card-clock {
-  flex-direction: column;
-
-  border: 0px solid;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-.clock-btn {
-  padding: 10px;
-  border: 2px solid gainsboro;
-  background-color: white;
-  border-radius: 15px;
-}
-.clock-btn:hover {
-  cursor:pointer;
-  background-color: rgb(240, 240, 240);
-}
-.clock-btn:active {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-  transform: translateY(3px);
+.border-middle {
+  min-height: 3rem;
+  border-left: 1px solid;
+  border-color: var(--color-shadow-yellow-bat);
 }
 </style>

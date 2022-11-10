@@ -1,5 +1,5 @@
 <template>
-  <UserVue title="Login"/>
+  <UserVue title="Login" status="login"/>
 </template>
 
 <script setup lang="ts">

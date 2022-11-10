@@ -15,12 +15,22 @@ export function getAllUsers(): Promise<User[]> {
   return HTTP.get('users')
 }
 
-export function postUser(email: string, username: string): Promise<void> {
-  return HTTP.post('users', {
-    "user": {
-      "email": email,
-      "username": username
-    }
+export function getUserToken(): Promise<User[]> {
+  return HTTP.get('auth')
+}
+
+export function loginUser(email: string, password: string): Promise<User> {
+  return HTTP.post('login', {
+    "email": email,
+    "password": password,
+  })
+}
+
+export function postUser(email: string, username: string, password: string): Promise<void> {
+  return HTTP.post('register', {
+    "email": email,
+    "username": username,
+    "password": password,
   })
 }
 

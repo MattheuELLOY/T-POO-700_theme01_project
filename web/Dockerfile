@@ -4,14 +4,9 @@ COPY . /app
 
 WORKDIR /app
 COPY package.json ./
-COPY pnpm-lock.yaml ./
-RUN npm install -g pnpm
-RUN pnpm install
-COPY . .
-RUN pnpm build
+RUN npm install
+RUN npm run build
 
-FROM nginx:stable-alpine as production
+FROM nginx
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY tools/nginx/default.conf /etc/nginx/conf.d/
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
