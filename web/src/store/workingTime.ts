@@ -8,7 +8,7 @@ export const useWorkingTime = defineStore('workingtime', {
 	}),
 	actions: {
 		getAll(idUser: number): void {
-			getWorkingTime(idUser).then((response) => this.allWorkingTime = <Workingtime[]>response.data.data)
+			getWorkingTime(idUser).then((response: any) => this.allWorkingTime = <Workingtime[]>response.data.data)
 		},
 	}
 })
