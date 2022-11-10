@@ -1,0 +1,18 @@
+services:
+  - docker
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-linux-x86_64 > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
+deploy:
+  provider: pages
+  cleanup: true
+  github_token: $github_token
+  local_dir: .
+  target_branch: PROD
+  on:
+    branch: UAT
+script:
+  - docker-compose up -d
