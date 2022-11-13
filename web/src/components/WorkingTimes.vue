@@ -1,28 +1,23 @@
 <template>
-  <div class="container">
-    <ul class="responsive-table">
-      <li class="table-header">
-          <th>
-            <div class="col col-1">start</div>
-            <div class="col col-2">end</div>
-            <div class="col col-3">id</div>
-            <div class="col col-4">userId</div>
-            <div class="col col-5">Delete</div>
-            <div class="col col-6">Update</div>
+  <div class="container card">
+    <ul class="responsive-table flex column white-text">
+      <li class="table-header flex">
+          <th class="flex center">
+            <div class="col col-1">Start</div>
+            <div class="col col-1">End</div>
+            <div class="col col-2"></div>
+            <div class="col col-2">
+              </div>
           </th>
       </li>
-      <li class="table-row" v-for="item in allWorkingTime">
-        <div class="col col-1" data-label="start">{{item.start}}</div>
-        <div class="col col-2" data-label="end">{{item.end}}</div>
-        <div class="col col-3" data-label="id">{{item.id}}</div>
-        <div class="col col-4" data-label="userId">{{item.user}}</div>
-        <button class="col col-5" style="background-color: #282e3c;" @click="deleteWorkingTime(<number>item.id)">Delete</button>
-        <button class="col col-6" style="background-color: #505c7c;" @click="update(<number>item.id)">Update</button>
+      <li class="table-row flex gap" v-for="item in allWorkingTime">
+        <div class="col col-1" data-label="start">{{ moment(item.start).format("YYYY-MM-DD, HH:mm:ss") }}</div>
+        <div class="col col-1" data-label="end">{{ moment(item.start).format("YYYY-MM-DD, HH:mm:ss") }}</div>
+        <button class="col col-2 btn" @click="deleteWorkingTime(<number>item.id)"><img class="icon" src="@/assets/trash.png"></button>
+        <button class="col col-2 btn" @click="update(<number>item.id)"><img class="icon" src='@/assets/pen.png'></button>
       </li>
     </ul>
   </div>
-      <button style="background-color: #505c7c;" v-on:click="createWorkingTime()">Create</button>
-
 </template>
   
 <script lang="ts">
@@ -30,6 +25,7 @@ import { useWorkingTime } from '@/store/workingTime';
 import router from '@/router'
 import { computed } from '@vue/reactivity';
 import { deletedWorkingTime } from '@/helpers/workingtime-helper';
+import moment from 'moment';
 
 export default {
   props: {
@@ -48,115 +44,102 @@ export default {
       router.push({ name: 'UpdateWorkingTime', params: { userId: <number>props.userId, workingtimeId: id }})
     }
 
-    function createWorkingTime(){
+    function createWorkingTime() {
       router.push({ name: 'workingtime', params: { status: 'new' }})
     }
 
     return {
       allWorkingTime,
-      columns: ["start", "end", "id", "userId", "Delete", "Update"],
       deleteWorkingTime,
       createWorkingTime,
       update,
+      moment
     }
   }
 }
 </script>
   
 <style scoped lang="css">
-body {
-	 font-family: 'lato', sans-serif;
-   color: black;
+.flex {
+  display: flex;
 }
- .container {
-  margin-top: 10%;
-	 width: 1000px;
-	 margin-left: auto;
-	 margin-right: auto;
-	 padding-left: 10px;
-	 padding-right: 10px;
+.row {
+  flex-direction: row;
 }
- h2 {
-	 font-size: 26px;
-	 margin: 20px 0;
-	 text-align: center;
+.center {
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  min-width: 60rem;
+  max-height: 40rem;
+  overflow: scroll;
+  overflow-x: auto;
+}
+.card {
+  border-top: none;
+  box-shadow: none;
+}
+.card:hover {
+  box-shadow: none;
+}
+::-webkit-scrollbar {
+  width: 7px;
 }
 
-li div{
-  color: black;
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-yellow-bat); 
+  border-radius: 10px;
 }
 
-button{
-  padding: 0.5em;
-  border: 20px #6c7a89 ;
-  color: white;
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-shadow-yellow-bat); 
+}
+.table-header {
+  border: 2px solid;
+  border-color: var(--color-yellow-bat);
+}
+.col {
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
 }
-
- h2 small {
-	 font-size: 0.5em;
-}
- .responsive-table li {
-	 border-radius: 3px;
-	 padding: 25px 30px;
-	 display: flex;
-	 justify-content: space-between;
-	 margin-bottom: 25px;
-}
- .responsive-table .table-header {
-	 background-color: #988829;
-	 font-size: 14px;
-	 text-transform: uppercase;
-	 letter-spacing: 0.03em;
-}
- .responsive-table .table-row {
-	 background-color: #fff;
-	 box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
-}
- .responsive-table .col-1 {
-	 flex-basis: 30%;
+.responsive-table .col-1 {
+  flex-basis: 30%;
 }
  .responsive-table .col-2 {
-	 flex-basis: 30%;
+	 flex-basis: 3rem;
 }
- .responsive-table .col-3 {
-	 flex-basis: 10%;
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
- .responsive-table .col-4 {
-	 flex-basis: 10%;
+li {
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 1rem;
+  border-radius: 4px;
+  border-bottom: 1.5px solid;
+  border-color: var(--color-yellow-bat);
 }
-.responsive-table .col-5 {
-	 flex-basis: 10%;
-   height: 100%;
-  width: 100%;
+li:hover {
+  border-color: var(--color-shadow-yellow-bat);
 }
-.responsive-table .col-6 {
-	 flex-basis: 10%;
+.icon {
+  width: 1.30rem;
 }
- @media all and (max-width: 767px) {
-	 .responsive-table .table-header {
-		 display: none;
-	}
-	 .responsive-table li {
-		 display: block;
-	}
-	 .responsive-table .col {
-		 flex-basis: 100%;
-	}
-	 .responsive-table .col {
-		 display: flex;
-		 padding: 10px 0;
-	}
-	 .responsive-table .col:before {
-		 color: #6c7a89;
-		 padding-right: 10px;
-		 content: attr(data-label);
-		 flex-basis: 50%;
-		 text-align: right;
-	}
+.btn {
+  border-color: var(--color-shadow-yellow-bat);
+}
+.btn:hover {
+  border-color: var(--color-yellow-bat);
 }
 </style>
   

@@ -9,7 +9,7 @@
       <img class="icon" src="@/assets/clock.png">
       <div class="border-middle" ></div>
       <h4 v-if="clocks.time" class="white-text">
-        {{ moment(clocks.time).format("HH:mm:ss dddd Do MMMM YYYY") }}
+        {{ moment(clocks.time).format("YYYY-MM-DD, HH:mm:ss") }}
       </h4>
     </div>
     <label>

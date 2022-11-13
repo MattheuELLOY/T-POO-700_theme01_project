@@ -89,6 +89,7 @@ export default {
     };
     function connect(): void {
       if (data.email && data.password) {
+        data.errors.length = 0;
         loginUser(data.email, data.password).then((response: any) => {
           (response.data.success === false)
           ? (data.errors.push(response.data.error))
