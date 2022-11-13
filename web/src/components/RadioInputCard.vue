@@ -19,7 +19,7 @@ props: {
     table: String,
     items: Array<String>,
   },
-  setup (props) {
+  setup () {
     const picked = ref('')
     return {
         picked,

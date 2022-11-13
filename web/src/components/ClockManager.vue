@@ -9,7 +9,7 @@
       <img class="icon" src="@/assets/clock.png">
       <div class="border-middle" ></div>
       <h4 v-if="clocks.time" class="white-text">
-        {{ moment(clocks.time).format("HH:mm:ss dddd Do MMMM YYYY") }}
+        {{ moment(clocks.time).format("YYYY-MM-DD, HH:mm:ss") }}
       </h4>
     </div>
     <label>
@@ -58,8 +58,6 @@ export default {
     function changeTextCheckBox(): void {
       data.textCheckbox = (clocks.value.status === false) ? 'Inactive' : 'Active'
     }
-
-    // const startTime = clocks.value.time.split('T')[1];
 
     return {
       moment,

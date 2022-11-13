@@ -36,6 +36,7 @@ const routes = [
 	{
 		path: '/create-user',
 		name: 'create-user',
+		meta: { access: 'admin' },
 		component: CreateUserVue
 	},
 	{
@@ -46,12 +47,14 @@ const routes = [
 	{
 		path: '/workingTime/:userId',
 		name: 'CreateWorkingTime',
+		meta: { access: 'admin' },
 		component: WorkingTimeVue,
 		props: true
 	},
 	{
 		path: '/workingTime/:userId/:workingtimeId',
 		name: 'UpdateWorkingTime',
+		meta: { access: 'admin' },
 		component: WorkingTimeVue,
 		props: true
 	},
@@ -70,6 +73,7 @@ const routes = [
 	{
 		path: '/parameters/:userId',
 		name: 'Parameters',
+		meta: { access: 'admin' },
 		component: ParametersVue,
 		props: true
 	}
@@ -81,15 +85,30 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-	if (to.name !== 'login' && to.name !== 'sign-up' && localStorage.getItem('token') && localStorage.getItem('id')) {
-		const id: number = <number>Number(localStorage.getItem('id'))
-		getUserToken().then((response: any) => {
-			if (response.data.data.id === id) {
-				next()
-			} else {
-				next({ name: 'login' })
-			}
-		})
+	if (to.name !== 'login' && to.name !== 'sign-up') {
+		if(localStorage.getItem('token') || localStorage.getItem('id')) {
+			const id: number = <number>Number(localStorage.getItem('id'))
+			getUserToken().then((response: any) => {
+				if (response.data.data.id === id) {
+					if (to.matched.some((route) => route.meta.access)) {
+						if (response.data.data.role === 'admin')
+							next()
+					 else {
+							next({ name: 'chartManager', params: { userId: response.data.data.id }})
+						}
+					} if (!to.params.userId || id === <number>Number(to.params.userId)) {
+						next()
+					} else {
+						console.log('id = ', to.params.userId, id)
+						next({ name: 'chartManager', params: { userId: id }})
+					}
+				} else {
+					next({ name: 'chartManager', params: { userId: response.data.data.id }})
+				}
+			})
+		} else {
+			next({ name: 'login' })
+		}
 	} else {
 		next()
 	}
