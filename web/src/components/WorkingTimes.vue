@@ -12,7 +12,7 @@
       </li>
       <li class="table-row flex gap" v-for="item in allWorkingTime">
         <div class="col col-1" data-label="start">{{ moment(item.start).format("YYYY-MM-DD, HH:mm:ss") }}</div>
-        <div class="col col-1" data-label="end">{{ moment(item.start).format("YYYY-MM-DD, HH:mm:ss") }}</div>
+        <div class="col col-1" data-label="end">{{ moment(item.end).format("YYYY-MM-DD, HH:mm:ss") }}</div>
         <button class="col col-2 btn" @click="deleteWorkingTime(<number>item.id)"><img class="icon" src="@/assets/trash.png"></button>
         <button class="col col-2 btn" @click="update(<number>item.id)"><img class="icon" src='@/assets/pen.png'></button>
       </li>

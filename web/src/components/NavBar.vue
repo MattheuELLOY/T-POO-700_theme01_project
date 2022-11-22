@@ -84,14 +84,11 @@ export default {
 
       if (id) {
         userStore.getSelected(id)
-        if(user.value.role === 'admin') {
-          workingTimeStore.getAll(id)
-        }
-
+        workingTimeStore.getAll(id)
         if (route.params.userId && route.params.workingtimeId) {
           router.replace({name: 'WorkingTimes', params: { userId: userSelected.value.id }})
         } else if (route.params.userId) {
-          router.push(actualRoute.slice(actualRoute.length, 1) + id)
+          router.replace(actualRoute.slice(actualRoute.length, 1) + id)
         }
       }
     }

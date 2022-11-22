@@ -36,10 +36,11 @@ export default {
     });
 
     const userStore = useUserStore()
-    const user = computed(() => userStore.user)
+    const user = computed(() => userStore.selectedUser)
+    userStore.getSelected(<number>props.userId)
 
     onMounted(() => {
-      userStore.get(<number>props.userId)
+        userStore.getSelected(<number>props.userId)
     })
 
     // Mes méthoes

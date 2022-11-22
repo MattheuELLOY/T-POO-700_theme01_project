@@ -33,8 +33,9 @@
 <script lang="ts">
 import { useUserStore } from '@/store/user'
 import { computed, onMounted, reactive, toRefs } from 'vue'
-import { postUser, putUser, deletedUser, getAllUsers, loginUser } from '@/helpers/user-helper'
+import { postUser, putUser, deletedUser, loginUser } from '@/helpers/user-helper'
 import router from '@/router'
+import type { User } from '@/models/user'
 
 export default {
   props: {
@@ -46,10 +47,18 @@ export default {
       email: '' as string,
       username: '' as string,
       password: '' as string,
-      errors: [] as string[]
+      errors: [] as string[],
+      userDislay: {}
     });
     const userStore = useUserStore()
     const user = computed(() => userStore.user)
+    const selectedUser = computed(() => userStore.selectedUser)
+
+    if (selectedUser.value.id) {
+      data.userDislay = computed(() => userStore.selectedUser)
+    } else {
+      data.userDislay = computed(() => userStore.user)
+    }
 
     onMounted(() => {
       if ((props.status === 'login' || props.status === 'signUp')) {
@@ -58,9 +67,6 @@ export default {
         } if (user.value?.id) {
           userStore.$reset()
         }
-      }
-      if (props.status === 'create') {
-        getAllUsers().then((response: any) => userStore.get(response.data.data[0].id))
       }
     })
 
@@ -77,10 +83,17 @@ export default {
     };
     function creatUser(): void {
       if (data.email && data.username && data.password) {
-        postUser(data.email, data.username, data.password).then((response: any) => {
-          userStore.getAll(),
-          (response.data.success === false) ? data.errors = response.data.errors : (data.errors.length = 0, router.push('/login'))
-        })
+        if (user.value.role === "admin") {
+          postUser(data.email, data.username, data.password).then((response: any) => {
+            userStore.getAll(),
+            (response.data.success === false) ? data.errors = response.data.errors : (data.errors.length = 0)
+          })
+        } else {
+          postUser(data.email, data.username, data.password).then((response: any) => {
+            userStore.getAll(),
+            (response.data.success === false) ? data.errors = response.data.errors : (data.errors.length = 0, router.push('/login'))
+          })
+        }
 
         data.email = ""
         data.username = ""
@@ -107,14 +120,22 @@ export default {
     }
     function updateUser(): void {
       if (data.email && data.username) {
-        putUser(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
+        if (selectedUser.value.id) {
+          putUser(selectedUser.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(selectedUser.value.id)})
+        } else {
+          putUser(user.value.id, data.email, data.username).then(() => { userStore.getAll(), userStore.get(user.value.id)})
+        }
 
         data.email = ""
         data.username = ""
       }
     }
     function deleteUser(): void {
-      deletedUser(user.value.id).then(() => { userStore.getAll(), userStore.delete() })
+      if (selectedUser.value.id) {
+        deletedUser(selectedUser.value.id).then(() => { userStore.getAll(), userStore.delete() })
+      } else {
+        deletedUser(user.value.id).then(() => { userStore.getAll(), userStore.delete() })
+      }
 		}
 
     return {

@@ -39,7 +39,7 @@ export default defineComponent({
       const dataWorkingTime = []
       const sortedArray = allWorkingTime.value.sort((a, b) => moment(a.start).diff(b.start))
       for(const workingTime of sortedArray) {
-        dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hours'))
+        dataWorkingTime.push(moment(workingTime.end).diff(moment(workingTime.start), 'hours') - 7)
 
       }
       return dataWorkingTime.slice(-7)

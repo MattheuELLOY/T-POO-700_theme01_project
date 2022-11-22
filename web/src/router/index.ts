@@ -96,10 +96,10 @@ router.beforeEach((to, from, next) => {
 					 else {
 							next({ name: 'chartManager', params: { userId: response.data.data.id }})
 						}
-					} if (!to.params.userId || id === <number>Number(to.params.userId)) {
+					}
+					if (response.data.data.role === 'admin' || !to.params.userId || id === <number>Number(to.params.userId)) {
 						next()
 					} else {
-						console.log('id = ', to.params.userId, id)
 						next({ name: 'chartManager', params: { userId: id }})
 					}
 				} else {

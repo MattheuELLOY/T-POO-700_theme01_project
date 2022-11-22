@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted} from 'vue'
+import {computed, defineComponent} from 'vue'
 import UserVue from '@/components/User.vue';
 import ClockManager from "@/components/ClockManager.vue";
 import { useUserStore } from '@/store/user';
@@ -22,10 +22,6 @@ export default defineComponent({
     const userStore = useUserStore()
     const user = computed(() => userStore.user)
 
-    onMounted(() => {
-      userStore.getByToken()
-    })
-
     return {
       user
     }
@@ -38,5 +34,6 @@ export default defineComponent({
 <style scoped lang="css">
   .profile-content {
     display: flex;
+    margin-top: 3.8rem;
   }
 </style>
